@@ -4,4 +4,8 @@ jdk:
 - oraclejdk8
 install:
 - cd desapp-groupF-backend && mvn test
-
+deploy:
+  - provider: heroku
+    skip_cleanup: true
+    api_key: 0397db8a-d678-4d13-929a-a073463a8eae
+    app: desarrolloappgrupof
