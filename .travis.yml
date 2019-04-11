@@ -6,7 +6,6 @@ install:
 - cd desapp-groupF-backend && mvn test
 
 script:
-        - cd desapp-groupF-backend/
         - "mvn cobertura:cobertura"
 
 after_success:
