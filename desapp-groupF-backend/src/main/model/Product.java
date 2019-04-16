@@ -3,11 +3,14 @@ package model;
 public class Product {
 
     String name;
-    Integer price;
+    Double price;
 
-    public Product(String name, Integer price){
+    public Product(String name, Double price){
         this.name=name;
         this.price=price;
     }
 
+    public Double getPrice() {
+        return price;
+    }
 }
