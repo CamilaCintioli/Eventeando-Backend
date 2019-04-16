@@ -9,7 +9,17 @@ public class Item {
         this.amount = amount;
     }
 
-    public float price() {
+    public Double price() {
         return product.price * amount;
     }
+
+    public Product getProduct() {
+        return this.product;
+    }
+
+    public Integer getAmount(){
+        return this.amount;
+    }
+
+
 }
