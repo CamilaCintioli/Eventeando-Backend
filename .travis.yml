@@ -10,8 +10,9 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-deploy:
-  - provider: heroku
-    skip_cleanup: true
-    api_key: 0397db8a-d678-4d13-929a-a073463a8eae
-    app: desarrolloappgrupof
+
+#deploy:
+#  - provider: heroku
+#    skip_cleanup: true
+#    api_key: 0397db8a-d678-4d13-929a-a073463a8eae
+#    app: desarrolloappgrupof
