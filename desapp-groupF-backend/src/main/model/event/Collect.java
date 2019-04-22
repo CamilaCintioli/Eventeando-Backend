@@ -1,6 +1,6 @@
 package model;
 
-import javafx.util.Pair;
+import model.exceptions.CollectionHasntReachedException;
 
 import java.util.ArrayList;
 import java.util.List;

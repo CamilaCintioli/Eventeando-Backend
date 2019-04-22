@@ -1,4 +1,4 @@
-package model;
+package model.exceptions;
 
 public class CollectionHasntReachedException extends Exception {
     public CollectionHasntReachedException(Double amountExpected, Double amauntMissing) {

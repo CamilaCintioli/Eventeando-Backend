@@ -1,4 +1,7 @@
-package model;
+package model.exceptions;
+
+import model.Item;
+import model.User;
 
 public class ItemAlreadyReservedException extends Exception {
     public ItemAlreadyReservedException(Item item, User user) {

@@ -1,11 +1,11 @@
 package model;
 
+import model.exceptions.ItemAlreadyReservedException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.util.Objects.isNull;
 
 public class Basket{
 
