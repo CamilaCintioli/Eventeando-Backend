@@ -1,6 +1,6 @@
 package model.validationStatus;
 
-import model.Party;
+import model.event.Party;
 import model.User;
 
 public interface ValidationStatus {
