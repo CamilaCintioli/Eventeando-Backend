@@ -1,5 +1,7 @@
 package model;
 
+import model.event.Collect;
+import model.exceptions.CollectionHasntReachedException;
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -1,5 +1,7 @@
-package model;
+package model.event;
 
+import model.Item;
+import model.User;
 import model.exceptions.ItemAlreadyReservedException;
 
 import java.util.ArrayList;
@@ -7,24 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Basket{
+public class Basket extends Event{
 
-    List<User> attendees= new ArrayList<User>();
-    List<Item> productsNeeded = new ArrayList<Item>();
     Map<Item, User> productsReserved = new HashMap<Item,User>();
-
-    public void acceptAttendee(User person) { this.attendees.add(person); }
-
-    public void addProductsNeeded(List<Item> productsNeeded) {
-        this.productsNeeded.addAll(productsNeeded);
-    }
 
     public List<Item> getProductsNeeded() {
         return this.productsNeeded;
-    }
-
-    public boolean isAttending(User person)  {
-        return this.attendees.contains(person);
     }
 
     public List<Item> getProductsReserved() {

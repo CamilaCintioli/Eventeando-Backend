@@ -1,5 +1,6 @@
 package model;
 
+import model.event.Party;
 import model.exceptions.DeadlineToConfirmAttendanceHasPassed;
 import org.junit.After;
 import org.junit.Before;

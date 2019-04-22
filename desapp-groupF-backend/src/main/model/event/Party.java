@@ -1,34 +1,24 @@
-package model;
+package model.event;
 
+import model.Item;
+import model.User;
 import model.validationStatus.ValidEventStatus;
 import model.validationStatus.ValidationStatus;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Party {
-    private List<User> attendees= new ArrayList<>();
-    private List<Item> productsNeeded = new ArrayList<>();
+public class Party extends Event{
+
     private LocalDateTime confirmationDeadline;
     private ValidationStatus validationStatus = new ValidEventStatus();
-
-    public boolean isAttending(User person) {
-        return this.attendees.contains(person);
-    }
 
     public List<Item> calculateShoppingList() {
 
         final Integer numberAtendees = attendees.size();
 
         return productsNeeded.stream().map(item -> new Item(item.getProduct(),item.getAmount()*numberAtendees)).collect(Collectors.toList());
-
-    }
-
-    public void addProductsNeeded(List<Item> productsNeeded) {
-
-        this.productsNeeded=productsNeeded;
 
     }
 
@@ -45,7 +35,7 @@ public class Party {
 
     public Double calculateCost() {
 
-        return this.calculateShoppingList().stream().mapToDouble(item -> item.getAmount()* item.getProduct().getPrice()).sum();
+        return this.calculateShoppingList().stream().mapToDouble(item -> item.totalPrice()).sum();
     }
 
     public void setDeadlineConfirmation(LocalDateTime confirmationDeadline) {
@@ -65,6 +55,7 @@ public class Party {
     }
 
 
+    @Override
     public void acceptAttendee(User person) {
         this.checkValidity();
         this.validationStatus.acceptAttendee(person,this);

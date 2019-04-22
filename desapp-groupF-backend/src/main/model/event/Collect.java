@@ -1,24 +1,13 @@
-package model;
+package model.event;
 
+import model.OpenAccount;
+import model.User;
 import model.exceptions.CollectionHasntReachedException;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Collect {
-    List<User> attendees= new ArrayList<User>();
-    List<Item> productsNeeded = new ArrayList<Item>();
+public class Collect extends Event{
     OpenAccount account = new OpenAccount();
 
-    /*public Collect(OpenAccount account) {
-        this.account = account;
-    }*/
-
-    public void acceptAttendee(User person) { this.attendees.add(person); }
-
-    public void addProductsNeeded(List<Item> productsNeeded) { this.productsNeeded.addAll(productsNeeded); }
-
-    public Double totalCost() { return productsNeeded.stream().mapToDouble(product -> product.price()).sum(); }
+    public Double totalCost() { return productsNeeded.stream().mapToDouble(product -> product.totalPrice()).sum(); }
 
     public Double chargePerAttendee() {
         if (attendees.size() > 0) {
@@ -26,10 +15,6 @@ public class Collect {
         } else {
             return new Double(0);
         }
-    }
-
-    public boolean isAttending(User person)  {
-        return this.attendees.contains(person);
     }
 
     public void pay(User person, Double amount) {

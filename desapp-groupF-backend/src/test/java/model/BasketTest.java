@@ -1,5 +1,7 @@
 package model;
 
+import model.event.Basket;
+import model.exceptions.ItemAlreadyReservedException;
 import org.junit.Test;
 
 import java.util.ArrayList;
