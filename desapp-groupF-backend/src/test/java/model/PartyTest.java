@@ -1,6 +1,8 @@
 package model;
 
+import model.exceptions.DeadlineToConfirmAttendanceHasPassed;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -15,15 +17,12 @@ public class PartyTest {
     private User user1 = new User();
     private User user2 = new User();
     private List<Item> productsNeeded = new ArrayList<>();
-    private Product coke = new Product("Coke",new Double(20));
-    private Product bread = new Product("Bread", new Double(30));
+    private Product coke = new Product("Coke", 20d);
+    private Product bread = new Product("Bread", 30d);
 
-    @Test
-    public void aPartyCanAcceptAnAttendee(){
-
-        party.acceptAttendee(user1);
-
-        assertTrue(party.isAttending(user1));
+    @Before
+    public void setUp(){
+        party.setDeadlineConfirmation(LocalDateTime.now().plusHours(1));
     }
 
     @Test
@@ -112,14 +111,35 @@ public class PartyTest {
     }
 
     @Test
-    public void aPartyHasAnInvalidConfirmationDeadline(){
+    public void aPartyHasAnInvalidConfirmationDeadlineAndItsStatusIsInvalid(){
 
         LocalDateTime confirmationDeadline = LocalDateTime.now().minusHours(1);
 
         party.setDeadlineConfirmation(confirmationDeadline);
 
-        assertFalse(party.isValid());
+        assertTrue(party.isInvalid());
 
+    }
+
+    @Test
+    public void aUserCanAttendAPartyWithAValidConfirmationDeadline(){
+
+        LocalDateTime confirmationDeadline = LocalDateTime.now().plusHours(1);
+        party.setDeadlineConfirmation(confirmationDeadline);
+
+        party.acceptAttendee(user1);
+
+        assertTrue(party.isAttending(user1));
+
+    }
+
+    @Test(expected = DeadlineToConfirmAttendanceHasPassed.class)
+    public void aUserCantAttendAPartyWithAnInvalidConfirmationDeadline(){
+
+        LocalDateTime confirmationDeadline = LocalDateTime.now().minusHours(1);
+        party.setDeadlineConfirmation(confirmationDeadline);
+
+        party.acceptAttendee(user1);
     }
 
     @After

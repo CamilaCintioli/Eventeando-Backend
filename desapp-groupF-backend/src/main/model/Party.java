@@ -1,7 +1,7 @@
 package model;
 
-import model.ValidationStatus.ValidEventStatus;
-import model.ValidationStatus.ValidationStatus;
+import model.validationStatus.ValidEventStatus;
+import model.validationStatus.ValidationStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,14 +9,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Party {
-    private List<User> attendees= new ArrayList<User>();
+    private List<User> attendees= new ArrayList<>();
     private List<Item> productsNeeded = new ArrayList<>();
     private LocalDateTime confirmationDeadline;
     private ValidationStatus validationStatus = new ValidEventStatus();
-
-    public void acceptAttendee(User person) {
-        this.attendees.add(person);
-    }
 
     public boolean isAttending(User person) {
         return this.attendees.contains(person);
@@ -56,13 +52,34 @@ public class Party {
         this.confirmationDeadline = confirmationDeadline;
     }
 
-    public boolean isValid() {
-
-        return this.validationStatus.isValid(this);
-
-    }
-
     public LocalDateTime getConfirmationDeadline() {
         return  this.confirmationDeadline;
     }
+
+    public void setValidationStatus(ValidationStatus status){
+        this.validationStatus = status;
+    }
+
+    public void addAttendee(User person) {
+        this.attendees.add(person);
+    }
+
+
+    public void acceptAttendee(User person) {
+        this.checkValidity();
+        this.validationStatus.acceptAttendee(person,this);
+    }
+
+    public void checkValidity(){
+        this.isValid();
+    }
+
+    public boolean isValid() {
+        return this.validationStatus.isValid(this);
+    }
+
+    public boolean isInvalid() {
+        return this.validationStatus.isInvalid(this);
+    }
+
 }
