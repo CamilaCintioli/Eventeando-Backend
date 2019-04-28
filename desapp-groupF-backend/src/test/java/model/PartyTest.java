@@ -108,6 +108,7 @@ public class PartyTest {
         party.setDeadlineConfirmation(confirmationDeadline);
 
         assertTrue(party.isValid());
+        assertFalse(party.isInvalid());
 
     }
 
@@ -118,7 +119,11 @@ public class PartyTest {
 
         party.setDeadlineConfirmation(confirmationDeadline);
 
+        party.checkValidity();
+
+
         assertTrue(party.isInvalid());
+        assertFalse(party.isValid());
 
     }
 
@@ -133,6 +138,8 @@ public class PartyTest {
         assertTrue(party.isAttending(user1));
 
     }
+
+
 
     @Test(expected = DeadlineToConfirmAttendanceHasPassed.class)
     public void aUserCantAttendAPartyWithAnInvalidConfirmationDeadline(){
