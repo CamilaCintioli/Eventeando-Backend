@@ -1,16 +1,13 @@
-package model;
+package model.economy;
 
+import model.User;
 import model.economy.Account;
 import model.economy.Movement;
 import model.economy.MovementType;
 import model.exceptions.InsufficientFundsException;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class AccountTest {
 
@@ -86,6 +83,8 @@ public class AccountTest {
         account.transferTo(10d,userB,userA);
     }
 
+    //MOVEMENT HISTORY.
+
     @Test
     public void AfterADepositItHasToBeRepresentedInTheAccountHistory() {
         account.deposit(10d);
@@ -116,13 +115,14 @@ public class AccountTest {
         Movement expected = new Movement(10d, MovementType.TRANSFERTO, userB);
         assertEquals(0, accountB.getBalance(),0);
 
+
         account.transferTo(10d,userB,userA);
 
         assertEquals(expected, account.getHistory().get(0));
     }
 
     @Test
-    public void AfterATransferInToItHasToBeRepresentedInTheAccountHistory() {
+    public void AfterATransferIntoItHasToBeRepresentedInTheAccountHistory() {
         account.setBalance(10d);
         Account accountB = new Account();
 
