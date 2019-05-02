@@ -1,10 +1,15 @@
-package model;
+package model.event;
 
+import model.Item;
+import model.Product;
+import model.User;
 import model.event.Party;
 import model.exceptions.DeadlineToConfirmAttendanceHasPassed;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -149,6 +154,18 @@ public class PartyTest {
 
         party.acceptAttendee(user1);
     }
+
+    @Test
+    public void aNewPartyIsCreatedAndSendMailToThePersonsInvited()  {
+
+
+        List<User> guests = new ArrayList<>();
+        //user1.setEmail("camila.cintioli@gmail.com");
+        //guests.add(user1);
+
+        party.setGuests(guests);
+    }
+
 
     @After
     public void tearDown(){

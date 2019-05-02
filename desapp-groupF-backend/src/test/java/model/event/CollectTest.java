@@ -1,5 +1,8 @@
-package model;
+package model.event;
 
+import model.Item;
+import model.Product;
+import model.User;
 import model.event.Collect;
 import model.exceptions.CollectionHasntReachedException;
 import org.junit.Test;
