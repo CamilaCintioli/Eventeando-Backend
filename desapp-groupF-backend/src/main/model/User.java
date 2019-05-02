@@ -1,6 +1,7 @@
 package model;
 
 import model.economy.Account;
+import model.economy.Fee;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +13,7 @@ public class User {
     private String password;
     private LocalDateTime birthDate;
     private Account account = new Account();
+    private boolean isDefaulter = false;
 
     public User() {}
 
@@ -63,12 +65,38 @@ public class User {
         this.birthDate = birthDate;
     }
 
+    //MONEY TRANSACTIONS
+
     public void transferInto(double ammount, User sender) {
         this.account.transferInto(ammount,sender);
+    }
+
+    public void extract(double ammount){
+        this.account.extract(ammount);
+    }
+
+    public void deposit(double ammount){
+        this.account.deposit(ammount);
     }
 
     public void setAccount(Account account) {
         this.account = account;
     }
 
+
+    public double getMoney() {
+        return account.getBalance();
+    }
+
+    public void chargeFee(Fee fee) {
+        this.account.chargeFee(fee,this);
+    }
+
+    public void markAsDefaulter() {
+        this.isDefaulter=true;
+    }
+
+    public boolean isDefaulter() {
+        return this.isDefaulter;
+    }
 }

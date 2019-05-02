@@ -2,6 +2,7 @@ package model.economy;
 
 import model.User;
 
+import java.util.Date;
 import java.util.Objects;
 
 import static java.util.Objects.isNull;
@@ -11,16 +12,19 @@ public class Movement {
     private MovementType movementType;
     private User user;
     private double ammount;
+    private Date date;
 
     public Movement(double ammount, MovementType movementType) {
         this.ammount = ammount;
         this.movementType = movementType;
+        this.date = new Date();
     }
 
     public Movement(double ammount, MovementType movementType, User user) {
         this.ammount = ammount;
         this.movementType = movementType;
         this.user = user;
+        this.date = new Date();
     }
 
     public MovementType getMovementType() {
