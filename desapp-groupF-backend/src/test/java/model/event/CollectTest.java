@@ -3,8 +3,8 @@ package model.event;
 import model.Item;
 import model.Product;
 import model.User;
-import model.event.Collect;
 import model.exceptions.CollectionHasntReachedException;
+import model.factory.EventFactory;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public class CollectTest {
 
@@ -28,9 +27,9 @@ public class CollectTest {
     }
 
     @Test
-    public void aCollectCanAcceptAnAttendee(){
+    public void aCollectCanAcceptAnUserAsAnAttendee(){
 
-        Collect collect = new Collect();
+        Collect collect = EventFactory.anyCollect();
         User person = new User();
         collect.acceptAttendee(person);
 
@@ -38,71 +37,81 @@ public class CollectTest {
     }
 
     @Test
-    public void aCollectCalculateChargePerAttendeeWith2Attendee() {
+    public void aCollectCanCalculateChargePerAttendeeWithTwoAttendees() {
 
-        Collect collect = new Collect();
+        Collect collect = EventFactory.anyCollect();
         setProductsForEvent(collect);
-        User personA = new User();
-        User personB = new User();
-        collect.acceptAttendee(personA);
-        collect.acceptAttendee(personB);
+        setAttendeesForEvent(collect, 2);
 
-        assertEquals( new Double(100) , collect.chargePerAttendee());
+        assertEquals( 100d , collect.chargePerAttendee(),0);
     }
 
     @Test
-    public void aCollectCalculateChargePerAttendeeWithNoneAttendee() {
+    public void aCollectWithNoAttendeesHasCeroChargePerAttendee() {
 
-        Collect collect = new Collect();
-        assertEquals( new Double(0), collect.chargePerAttendee());
+        Collect collect = EventFactory.anyCollect();
+
+        assertEquals( 0d, collect.chargePerAttendee(),0);
     }
 
     @Test
     public void aCollectTotalCost() {
 
-        Collect collect = new Collect();
+        Collect collect = EventFactory.anyCollect();
         setProductsForEvent(collect);
 
-        assertEquals(new Double(200), collect.totalCost());
+        assertEquals(200d, collect.totalCost(),0);
     }
 
     @Test
     public void aCollectCanBePayed() {
 
-        Collect collect = new Collect();
+        Collect collect = EventFactory.anyCollect();
         setProductsForEvent(collect);
-        User personA = new User();
-        User personB = new User();
-        collect.acceptAttendee(personA);
-        collect.acceptAttendee(personB);
+        User person = setAttendeeForCollect(collect);
 
-        collect.pay(personA, new Double(100));
+        collect.pay(person, 100d);
 
-        assertEquals(new Double(100), collect.pendingCost());
+        assertEquals(100d, collect.pendingCost(),0);
     }
 
     @Test
     public void aPersonCanExtractOnceTheCollectionHasBeenReached() throws CollectionHasntReachedException {
-        Collect collect = new Collect();
+        Collect collect = EventFactory.anyCollect();
         setProductsForEvent(collect);
-        User personA = new User();
-        collect.acceptAttendee(personA);
+        User person = setAttendeeForCollect(collect);
 
-        collect.pay(personA, new Double(200));
+        collect.pay(person, 200d);
 
-        assertEquals(new Double(200), collect.extractAll(personA));
+        assertEquals(200d, collect.extractAll(person),0);
     }
 
     @Test(expected = CollectionHasntReachedException.class)
     public void aPersonCantExtractIfTheCollectionHasntBeenReached() throws CollectionHasntReachedException {
-        Collect collect = new Collect();
+        Collect collect = EventFactory.anyCollect();
         setProductsForEvent(collect);
-        User personA = new User();
-        collect.acceptAttendee(personA);
+        User person = setAttendeeForCollect(collect);
 
-        collect.pay(personA, new Double(100));
+        collect.pay(person, 100d);
 
-        collect.extractAll(personA);
+        collect.extractAll(person);
+    }
+
+    private void setAttendeesForEvent(Collect collect,Integer numberOfAttendees) {
+
+        Integer numOfAttendees = numberOfAttendees;
+
+        while(numOfAttendees>0){
+            User user = new User();
+            collect.acceptAttendee(user);
+            numOfAttendees -= 1;
+        }
+    }
+
+    private User setAttendeeForCollect(Collect collect) {
+        User person = new User();
+        collect.acceptAttendee(person);
+        return person;
     }
 
 }
