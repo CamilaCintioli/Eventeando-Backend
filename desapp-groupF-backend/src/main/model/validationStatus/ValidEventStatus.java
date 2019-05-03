@@ -7,25 +7,25 @@ import java.time.LocalDateTime;
 
 public class ValidEventStatus implements ValidationStatus {
 
+    public void acceptAttendee(User person, Party party) {
+
+        if(!isValid(party))this.nextStatus(party, person);
+        party.addAttendee(person);
+
+    }
+
     public boolean isValid(Party party) {
 
+        LocalDateTime confirmationDeadline = party.getConfirmationDeadline();
         LocalDateTime now = LocalDateTime.now();
-        boolean isValid = now.isBefore(party.getConfirmationDeadline());
+        boolean isValid = now.isBefore(confirmationDeadline);
 
-        if (!isValid) this.nextStatus(party);
         return isValid;
     }
 
-    public boolean isInvalid(Party party) {
-        return !isValid(party);
-    }
-
-    public void acceptAttendee(User person, Party party) {
-        party.addAttendee(person);
-    }
-
-    private void nextStatus(Party party) {
+    private void nextStatus(Party party, User person) {
         party.setValidationStatus(new InvalidEventStatus());
+        party.acceptAttendee(person);
     }
 
 }

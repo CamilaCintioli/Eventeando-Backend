@@ -11,10 +11,6 @@ public class InvalidEventStatus implements ValidationStatus {
         return false;
     }
 
-    public boolean isInvalid(Party party){
-        return true;
-    }
-
     public void acceptAttendee(User person, Party party) {
         throw new DeadlineToConfirmAttendanceHasPassed("Deadline to confirm attendance has already passed.");
     }

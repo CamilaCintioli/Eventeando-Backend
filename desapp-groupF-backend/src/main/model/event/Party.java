@@ -12,7 +12,11 @@ import java.util.stream.Collectors;
 public class Party extends Event{
 
     private LocalDateTime confirmationDeadline;
-    private ValidationStatus validationStatus = new ValidEventStatus();
+    private ValidationStatus validationStatus;
+
+    public Party(){
+        this.validationStatus = new ValidEventStatus();
+    }
 
     public List<Item> calculateShoppingList() {
 
@@ -57,20 +61,8 @@ public class Party extends Event{
 
     @Override
     public void acceptAttendee(User person) {
-        this.checkValidity();
         this.validationStatus.acceptAttendee(person,this);
     }
 
-    public void checkValidity(){
-        this.isValid();
-    }
-
-    public boolean isValid() {
-        return this.validationStatus.isValid(this);
-    }
-
-    public boolean isInvalid() {
-        return this.validationStatus.isInvalid(this);
-    }
-
+    public boolean hasValidConfirmationDeadline() { return this.validationStatus.isValid(this);}
 }
