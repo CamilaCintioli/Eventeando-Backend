@@ -3,37 +3,30 @@ package model.event;
 import model.Item;
 import model.Product;
 import model.User;
-import model.event.Party;
 import model.exceptions.DeadlineToConfirmAttendanceHasPassed;
 
-import org.junit.After;
-import org.junit.Before;
+import model.factory.EventFactory;
 import org.junit.Test;
 
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class PartyTest {
 
-    private Party party = new Party();
-    private User user1 = new User();
-    private User user2 = new User();
     private List<Item> productsNeeded = new ArrayList<>();
     private Product coke = new Product("Coke", 20d);
     private Product bread = new Product("Bread", 30d);
 
-    @Before
-    public void setUp(){
-        party.setDeadlineConfirmation(LocalDateTime.now().plusHours(1));
-    }
 
     @Test
     public void aPartyHasProducts(){
 
+        Party party = EventFactory.anyParty();
         Item oneCoke = new Item(coke,1);
         productsNeeded.add(oneCoke);
 
@@ -44,11 +37,9 @@ public class PartyTest {
     }
 
     @Test
-    public void aPartyCalculatesShoppingListWithNoAttendeesAndHasNothingToBuy(){
+    public void aPartyCalculatesShoppingListWithNoAttendeesSoItHasNothingToBuy(){
 
-        List<Item> products = new ArrayList<>();
-        products.add(new Item(coke,1));
-        setProductsForEvent(party, products);
+        Party party = EventFactory.anyParty();
 
         List<Item> shoppingList = party.calculateShoppingList();
 
@@ -56,51 +47,41 @@ public class PartyTest {
     }
 
     @Test
-    public void aPartyCalculatesShoppingListWithTwoAttendees() {
+    public void aPartyThatNeedsACokePerAttendeeAndHasTwoAttendeesWhenTheShoppingListIsCalculatedTwoCokesAreNeeded() {
 
-        List<User> attendees = new ArrayList<>();
-        attendees.add(user1);
-        attendees.add(user2);
-        setAttendeesForEvent(party,attendees);
-        setProductsForEvent(party);
+        Party party = EventFactory.anyParty();
+        setAttendeesForEvent(party,2);
+        setProductForEvent(party, new Item(coke,1));
 
         List<Item> shoppingList = party.calculateShoppingList();
 
-        Integer cokeQuantity = shoppingList.get(0).getAmount();
-
-        assertEquals(2,cokeQuantity,0);
-
+        assertEquals(2,shoppingList.get(0).getAmount(),0);
     }
 
 
+
     @Test
-    public void aPartyCalculatesFinalCostForTwoAttendeesWithAProductCostTwenty(){
+    public void aPartyCalculatesFinalCostWithTwoAttendeesWithAProductThatCostsTwentyPesos(){
 
-        List<User> attendees = new ArrayList<>();
-        attendees.add(user1);
-        attendees.add(user2);
 
-        setAttendeesForEvent(party,attendees);
-        setProductsForEvent(party);
+        Party party = EventFactory.anyParty();
+        setAttendeesForEvent(party,2);
+
+        Product coke = new Product("Coke", 20d);
+        setProductForEvent(party, new Item(coke,1));
 
         assertEquals(40,party.calculateCost(),0);
-
 
     }
 
     @Test
     public void aPartyCalculatesFinalCostForTwoAttendeesAndTwoProducts(){
 
-        List<User> attendees = new ArrayList<>();
-        attendees.add(user1);
-        attendees.add(user2);
+        Party party = EventFactory.anyParty();
+        List<Item> products = Arrays.asList(new Item(coke,1),new Item(bread,2));
 
-        List<Item> products = new ArrayList<>();
-        products.add(new Item(coke,1));
-        products.add(new Item(bread,2));
-
-        setAttendeesForEvent(party,attendees);
-        setProductsForEvent(party,products);
+        setAttendeesForEvent(party,2);
+        party.addProductsNeeded(products);
 
         assertEquals(160,party.calculateCost(),0);
     }
@@ -108,39 +89,36 @@ public class PartyTest {
     @Test
     public void aPartyHasAValidConfirmationDeadline(){
 
+        Party party = EventFactory.anyParty();
         LocalDateTime confirmationDeadline = LocalDateTime.now().plusHours(1);
-
         party.setDeadlineConfirmation(confirmationDeadline);
 
-        assertTrue(party.isValid());
-        assertFalse(party.isInvalid());
-
+        assertTrue(party.hasValidConfirmationDeadline());
     }
 
     @Test
     public void aPartyHasAnInvalidConfirmationDeadlineAndItsStatusIsInvalid(){
 
-        LocalDateTime confirmationDeadline = LocalDateTime.now().minusHours(1);
-
-        party.setDeadlineConfirmation(confirmationDeadline);
-
-        party.checkValidity();
+        Party party = EventFactory.anyParty();
+        LocalDateTime invalidConfirmationDeadline = LocalDateTime.now().minusHours(1);
+        party.setDeadlineConfirmation(invalidConfirmationDeadline);
 
 
-        assertTrue(party.isInvalid());
-        assertFalse(party.isValid());
+        assertFalse(party.hasValidConfirmationDeadline());
 
     }
 
     @Test
     public void aUserCanAttendAPartyWithAValidConfirmationDeadline(){
 
+        Party party = EventFactory.anyParty();
         LocalDateTime confirmationDeadline = LocalDateTime.now().plusHours(1);
         party.setDeadlineConfirmation(confirmationDeadline);
+        User user = new User();
 
-        party.acceptAttendee(user1);
+        party.acceptAttendee(user);
 
-        assertTrue(party.isAttending(user1));
+        assertTrue(party.isAttending(user));
 
     }
 
@@ -149,48 +127,39 @@ public class PartyTest {
     @Test(expected = DeadlineToConfirmAttendanceHasPassed.class)
     public void aUserCantAttendAPartyWithAnInvalidConfirmationDeadline(){
 
+        Party party = EventFactory.anyParty();
         LocalDateTime confirmationDeadline = LocalDateTime.now().minusHours(1);
         party.setDeadlineConfirmation(confirmationDeadline);
+        User user = new User();
 
-        party.acceptAttendee(user1);
+        party.acceptAttendee(user);
     }
 
     @Test
     public void aNewPartyIsCreatedAndSendMailToThePersonsInvited()  {
 
-
-        List<User> guests = new ArrayList<>();
-        //user1.setEmail("camila.cintioli@gmail.com");
-        //guests.add(user1);
-
-        party.setGuests(guests);
+        //TODO: test sending mail to user.
+ 
     }
 
 
-    @After
-    public void tearDown(){
-        productsNeeded = new ArrayList<>();
-    }
+    private void setAttendeesForEvent(Party party,Integer numberOfAttendees) {
 
-    private void setAttendeesForEvent(Party party, List<User> attendees) {
+        Integer numOfAttendees = numberOfAttendees;
 
-        for(User attendee:attendees){
-            party.acceptAttendee(attendee);
+        while(numOfAttendees>0){
+            User user = new User();
+            party.acceptAttendee(user);
+            numOfAttendees -= 1;
         }
     }
 
-    private void setProductsForEvent(Party party, List<Item> products){
 
+    private void setProductForEvent(Party party, Item item) {
+
+        List<Item> products = Arrays.asList(item);
         party.addProductsNeeded(products);
-    }
-
-    private void setProductsForEvent(Party party) {
-
-        List<Item> products = new ArrayList<>();
-        products.add(new Item(coke,1));
-        setProductsForEvent(party, products);
 
     }
-
 
 }
