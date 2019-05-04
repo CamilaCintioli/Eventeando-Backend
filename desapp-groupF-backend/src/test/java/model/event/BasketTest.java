@@ -3,8 +3,8 @@ package model.event;
 import model.Item;
 import model.Product;
 import model.User;
-import model.event.Basket;
 import model.exceptions.ItemAlreadyReservedException;
+import model.factory.EventFactory;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -17,12 +17,13 @@ public class BasketTest {
 
 
     @Test
-    public void aPartyHasProducts(){
+    public void aBasketHasProducts(){
 
-        Basket basket = new Basket();
+        Basket basket = EventFactory.anyBasket();
         List<Item> productsNeeded = new ArrayList<>();
         Product coke = new Product("Coke",new Double(20));
         productsNeeded.add(new Item(coke,10));
+
         basket.addProductsNeeded(productsNeeded);
 
         assertEquals(productsNeeded, basket.getProductsNeeded());
@@ -31,7 +32,7 @@ public class BasketTest {
     @Test
     public void aBasketCanAcceptAnAttendee(){
 
-        Basket basket = new Basket();
+        Basket basket = EventFactory.anyBasket();
         User person = new User();
         basket.acceptAttendee(person);
 
@@ -40,9 +41,9 @@ public class BasketTest {
 
     @Test
     public void aBasketCanReturnTheProductsMissing() {
-        Basket basket = new Basket();
+        Basket basket = EventFactory.anyBasket();
         List<Item> productsNeeded = new ArrayList<>();
-        Product coke = new Product("Coke",new Double(20));
+        Product coke = new Product("Coke", 20d);
         productsNeeded.add(new Item(coke,10));
         basket.addProductsNeeded(productsNeeded);
 
@@ -51,11 +52,11 @@ public class BasketTest {
 
     @Test
     public void aBasketCanReserveAProduct() throws ItemAlreadyReservedException {
-        Basket basket = new Basket();
+        Basket basket = EventFactory.anyBasket();
         User person = new User();
         basket.acceptAttendee(person);
         List<Item> productsNeeded = new ArrayList<>();
-        Product coke = new Product("Coke",new Double(20));
+        Product coke = new Product("Coke", 20d);
         Item cokeItem = new Item(coke,10);
         productsNeeded.add(cokeItem);
         basket.addProductsNeeded(productsNeeded);
@@ -68,19 +69,29 @@ public class BasketTest {
     @Test(expected = ItemAlreadyReservedException.class)
     public void aItemCantBeReservedIfItIsAlreadyReserved() throws ItemAlreadyReservedException {
 
-        Basket basket = new Basket();
-        User personA = new User();
-        User personB = new User();
-        basket.acceptAttendee(personA);
-        basket.acceptAttendee(personB);
+        Basket basket = EventFactory.anyBasket();
+        User personA = setAttendeeForBasket(basket);
+        User personB = setAttendeeForBasket(basket);
+
+        setProductNeededForEvent();
         List<Item> productsNeeded = new ArrayList<>();
-        Product coke = new Product("Coke",new Double(20));
+        Product coke = new Product("Coke", 20d);
         Item cokeItem = new Item(coke,10);
         productsNeeded.add(cokeItem);
         basket.addProductsNeeded(productsNeeded);
 
         basket.reserve(cokeItem, personA);
         basket.reserve(cokeItem, personB);
+    }
+
+    private void setProductNeededForEvent() {
+    }
+
+
+    private User setAttendeeForBasket(Basket basket) {
+        User person = new User();
+        basket.acceptAttendee(person);
+        return person;
     }
 
 }

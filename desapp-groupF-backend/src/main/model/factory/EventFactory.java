@@ -1,5 +1,6 @@
 package model.factory;
 
+import model.event.Basket;
 import model.event.Collect;
 import model.event.Party;
 
@@ -19,5 +20,9 @@ public class EventFactory {
     public static Collect anyCollect() {
 
         return new Collect();
+    }
+
+    public static Basket anyBasket() {
+        return new Basket();
     }
 }
