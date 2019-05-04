@@ -4,7 +4,6 @@ import model.User;
 import model.exceptions.InsufficientFundsException;
 import org.junit.Test;
 
-import javax.jws.soap.SOAPBinding;
 
 import static org.junit.Assert.*;
 
