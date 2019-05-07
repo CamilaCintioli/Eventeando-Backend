@@ -13,10 +13,6 @@ public class Basket extends Event{
 
     Map<Item, User> productsReserved = new HashMap<Item,User>();
 
-    public List<Item> getProductsNeeded() {
-        return this.productsNeeded;
-    }
-
     public List<Item> getProductsReserved() {
         return new ArrayList<Item>(productsReserved.keySet());
     }
