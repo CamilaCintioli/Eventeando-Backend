@@ -12,7 +12,7 @@ public class LoanTest {
     @Test
     public void aLoanShouldHaveSixFeesToBePayed(){
 
-        User user = new User(); //Puede mockearse.
+        User user = new User();
         Loan loan = new Loan(user);
 
         assertEquals(6,loan.getFees().size());
@@ -21,7 +21,7 @@ public class LoanTest {
     @Test
     public void aCurrentFeeOfANewLoanShouldBeTheFirstOne(){
 
-        User user = new User(); //Puede mockearse.
+        User user = new User();
         Loan loan = new Loan(user);
 
         assertSame(loan.getFees().get(0),loan.getCurrentFee());
@@ -30,7 +30,7 @@ public class LoanTest {
     @Test
     public void whenTheFirstFeeIsPayedTheCurrentFeeIsTheNextOneAndTheUserHas200PesosLess(){
 
-        User user = new User(); //Puede mockearse.
+        User user = new User();
         Loan loan = new Loan(user);
 
         loan.getCurrentFee().charge();
@@ -43,7 +43,7 @@ public class LoanTest {
     @Test(expected = InsufficientFundsException.class)
     public void whenTheCurrentFeeCanNotBePaidTheCurrentFeeIsTheSame(){
 
-        User user = new User(); //Puede mockearse.
+        User user = new User();
         Loan loan = new Loan(user);
 
         user.extract(900d);
@@ -57,7 +57,7 @@ public class LoanTest {
     @Test(expected = InsufficientFundsException.class)
     public void aPendingFeeIsAutomaticallyChargedAfterADeposit(){
 
-        User user = new User(); //Puede mockearse.
+        User user = new User();
         Loan loan = new Loan(user);
 
         user.extract(900d);
