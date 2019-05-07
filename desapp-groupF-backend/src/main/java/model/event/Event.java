@@ -24,6 +24,8 @@ public class Event {
         this.productsNeeded.addAll(productsNeeded);
     }
 
+    public List<Item> getProductsNeeded() { return this.productsNeeded; }
+
     public void setGuests(List<User> guests)  {
         this.guests = guests;
     }

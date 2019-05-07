@@ -26,11 +26,6 @@ public class Party extends Event{
 
     }
 
-    public List<Item> getProductsNeeded() {
-
-        return this.productsNeeded;
-    }
-
     public boolean hasNothingToBuy(List<Item> shoppingList) {
 
         return shoppingList.stream().allMatch(item -> item.getAmount() == 0);
