@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository;
 
-import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.event.Event;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Event;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

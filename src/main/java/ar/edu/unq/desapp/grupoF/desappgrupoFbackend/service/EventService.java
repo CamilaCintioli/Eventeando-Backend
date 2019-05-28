@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.service;
 
-import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.event.Event;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Event;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
