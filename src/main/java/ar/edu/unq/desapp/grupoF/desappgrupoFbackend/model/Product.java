@@ -1,8 +1,14 @@
 package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model;
 
-public class Product {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
+public class Product {
+    @Id
     String name;
+    @Column
     Double price;
 
     public Product(String name, Double price){

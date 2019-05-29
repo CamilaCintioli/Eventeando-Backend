@@ -15,11 +15,11 @@ public class Event {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     Long id;
-    @Transient
+    @OneToMany(fetch= FetchType.LAZY,cascade=CascadeType.ALL)
     List<User> attendees = new ArrayList<User>();
-    @Transient
+    @OneToMany(fetch= FetchType.LAZY,cascade=CascadeType.ALL)
     List<Item> productsNeeded = new ArrayList<Item>();
-    @Transient
+    @OneToMany(fetch= FetchType.LAZY,cascade=CascadeType.ALL)
     List<User> guests = new ArrayList<>();
     @Transient
     EmailSender mailSender = new EmailSender();
@@ -46,7 +46,7 @@ public class Event {
         List<String> guestsMails = guests.stream().map(g -> g.getEmail()).collect(Collectors.toList());
         String message = "Veni al evento con nosotros.";
 
-        mailSender.sendEmail(guestsMails,"Invitacion", message);
+        //mailSender.sendEmail(guestsMails,"Invitacion", message);
 
     }
 
