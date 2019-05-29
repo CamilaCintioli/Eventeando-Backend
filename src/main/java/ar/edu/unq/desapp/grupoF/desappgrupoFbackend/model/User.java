@@ -3,16 +3,30 @@ package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.economy.Account;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.economy.Fee;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue
+    Long id;
+    @Column
     private String name;
+    @Column
     private String lastName;
+    @Column
     private String email;
+    @Column
     private String password;
+    @Column
     private LocalDateTime birthDate;
+    //@OneToOne(targetEntity = Account.class, cascade=CascadeType.ALL)
+    @Transient
     private Account account = new Account();
+    @Column
     private boolean isDefaulter = false;
 
     public User() {}
@@ -24,6 +38,7 @@ public class User {
         setLastName(lastName);
         setBirthDate(birthDate);
     }
+
 
     public String getName() {
         return name;
