@@ -4,13 +4,19 @@ import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.Item;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.User;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.exceptions.ItemAlreadyReservedException;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Entity
 public class Basket extends Event{
 
+    @ElementCollection
+    @CollectionTable(name="BASKET_RESERVED_PRODUCTS")
+    @Column(name="USER_ID")
+    @MapKeyJoinColumn(name="ITEM_ID")
     Map<Item, User> productsReserved = new HashMap<Item,User>();
 
     public List<Item> getProductsReserved() {

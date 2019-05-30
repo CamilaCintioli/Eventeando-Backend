@@ -1,11 +1,19 @@
 package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event;
 
-import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.OpenAccount;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.CollectAccount;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.User;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.exceptions.CollectionHasntReachedException;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Collect extends Event{
-    OpenAccount account = new OpenAccount();
+
+    @OneToOne(cascade = CascadeType.ALL, targetEntity = CollectAccount.class, fetch = FetchType.LAZY)
+    CollectAccount account = new CollectAccount();
 
     public Double totalCost() { return productsNeeded.stream().mapToDouble(product -> product.totalPrice()).sum(); }
 

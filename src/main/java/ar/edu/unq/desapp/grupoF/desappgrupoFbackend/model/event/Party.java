@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.User;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.validationStatus.ValidEventStatus;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.validationStatus.ValidationStatus;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 @Entity
 public class Party extends Event{
 
-    @Transient
+    @Column
     private LocalDateTime confirmationDeadline;
     @Transient
     private ValidationStatus validationStatus;
