@@ -1,8 +1,7 @@
 package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.controller;
 
-import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.EventDTO;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.dto.EventDTO;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Basket;
-import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Collect;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Event;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Party;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.service.EventService;
@@ -26,6 +25,8 @@ public class EventController {
 
     @PutMapping("/new/event")
     public Event add(){
+
+        eventService.saveEvent(new Basket());
 
         return eventService.saveEvent(new Party());
     }
