@@ -67,4 +67,6 @@ public class Party extends Event{
     }
 
     public boolean hasValidConfirmationDeadline() { return this.validationStatus.isValid(this);}
+
+
 }

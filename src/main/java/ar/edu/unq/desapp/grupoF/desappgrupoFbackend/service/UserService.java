@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Component("userService")
 @Transactional
 public class UserService {
@@ -27,7 +29,7 @@ public class UserService {
             throw new EmailExistsException(
                     "There is an account with that email: " + anUser.getEmail());
         }
-        User user = new User(anUser.getEmail(), anUser.getName(), anUser.getLastName(), anUser.getPassword(), anUser.getBirthDate());
+        User user = new User(anUser.getEmail(), anUser.getName(), anUser.getLastName(), anUser.getPassword());
         userRepository.save(user);
         return user;
     }
@@ -47,5 +49,9 @@ public class UserService {
         else {
             throw new LoginErrorException("Incorrect email or password");
         }
+    }
+
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 }

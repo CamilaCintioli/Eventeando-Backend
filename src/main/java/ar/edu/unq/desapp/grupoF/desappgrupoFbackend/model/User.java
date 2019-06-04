@@ -4,8 +4,7 @@ import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.economy.Account;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.economy.Fee;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Date;
+
 
 @Entity
 public class User {
@@ -22,7 +21,7 @@ public class User {
     @Column
     private String password;
     @Column
-    private LocalDateTime birthDate;
+    //private LocalDateTime birthDate;
     //@OneToOne(targetEntity = Account.class, cascade=CascadeType.ALL)
     @Transient
     private Account account = new Account();
@@ -31,12 +30,12 @@ public class User {
 
     public User() {}
 
-    public User(String email, String name, String lastName, String password, LocalDateTime birthDate) {
+    public User(String email, String name, String lastName, String password) {
         setEmail(email);
         setName(name);
         setPassword(password);
         setLastName(lastName);
-        setBirthDate(birthDate);
+        //setBirthDate(birthDate);
     }
 
 
@@ -72,13 +71,9 @@ public class User {
         this.password = password;
     }
 
-    public LocalDateTime getBirthDate() {
-        return birthDate;
-    }
+    //public LocalDateTime getBirthDate() {return birthDate;    }
 
-    public void setBirthDate(LocalDateTime birthDate) {
-        this.birthDate = birthDate;
-    }
+    //public void setBirthDate(LocalDateTime birthDate) {this.birthDate = birthDate;}
 
     //MONEY TRANSACTIONS
 
@@ -114,4 +109,5 @@ public class User {
     public boolean isDefaulter() {
         return this.isDefaulter;
     }
-}
+
+    }

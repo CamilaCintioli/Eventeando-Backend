@@ -1,15 +1,17 @@
 package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.controller;
 
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.User;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.dto.EventDTO;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.dto.NewUserDto;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Event;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.login.Login;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -29,5 +31,12 @@ public class UserController {
     @PostMapping("/users/sessions")
     public User signIn(@RequestBody @Valid Login anUser){
         return userService.signIn(anUser);
+    }
+
+    @RequestMapping("/users")
+    public List<User> getAllEvents() {
+
+        return userService.getAll();
+
     }
 }

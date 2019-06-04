@@ -17,6 +17,10 @@ public class Item {
         this.amount = amount;
     }
 
+    public Item(){
+
+    }
+
     public Double totalPrice() {
         return product.price * amount;
     }

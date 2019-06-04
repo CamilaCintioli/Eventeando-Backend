@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.User;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.mailing.EmailSender;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +20,7 @@ public class Event {
     List<User> attendees = new ArrayList<User>();
     @OneToMany(fetch= FetchType.LAZY,cascade=CascadeType.ALL)
     List<Item> productsNeeded = new ArrayList<Item>();
-    @OneToMany(fetch= FetchType.LAZY,cascade=CascadeType.ALL)
+    @ManyToMany(fetch= FetchType.LAZY)
     List<User> guests = new ArrayList<>();
     @Transient
     EmailSender mailSender = new EmailSender();
@@ -54,5 +55,7 @@ public class Event {
     public List<User> getGuests() {
         return this.guests;
     }
+
+
 }
 
