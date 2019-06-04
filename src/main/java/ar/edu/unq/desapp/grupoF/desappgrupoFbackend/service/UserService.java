@@ -29,7 +29,11 @@ public class UserService {
             throw new EmailExistsException(
                     "There is an account with that email: " + anUser.getEmail());
         }
-        User user = new User(anUser.getEmail(), anUser.getName(), anUser.getLastName(), anUser.getPassword());
+
+        //User user = new User(anUser.getUsername(), anUser.getEmail(), anUser.getName(), anUser.getLastName(), anUser.getPassword(), anUser.getBirthDate());
+        //TODO deberia pasar la fecha
+        User user = new User(anUser.getUsername(), anUser.getEmail(), anUser.getName(), anUser.getLastName(), anUser.getPassword());
+
         userRepository.save(user);
         return user;
     }
@@ -51,7 +55,9 @@ public class UserService {
         }
     }
 
+
     public List<User> getAll() {
+
         return userRepository.findAll();
     }
 }
