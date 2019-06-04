@@ -21,24 +21,40 @@ public class User {
     private String email;
     @Column
     private String password;
+    /*
     @Column
     private LocalDateTime birthDate;
+    */
     //@OneToOne(targetEntity = Account.class, cascade=CascadeType.ALL)
     @Transient
     private Account account = new Account();
     @Column
     private boolean isDefaulter = false;
+    @Column
+    private String username;
 
     public User() {}
 
-    public User(String email, String name, String lastName, String password, LocalDateTime birthDate) {
+    /*public User(String username, String email, String name, String lastName, String password, LocalDateTime birthDate) {
+        setUsername(username);
         setEmail(email);
         setName(name);
         setPassword(password);
         setLastName(lastName);
         setBirthDate(birthDate);
     }
+    */
+    public User(String username, String email, String name, String lastName, String password) {
+        setUsername(username);
+        setEmail(email);
+        setName(name);
+        setPassword(password);
+        setLastName(lastName);
+    }
 
+    public String getUsername() { return username; }
+
+    public void setUsername(String username) { this.username = username; }
 
     public String getName() {
         return name;
@@ -71,7 +87,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
+/*
     public LocalDateTime getBirthDate() {
         return birthDate;
     }
@@ -79,7 +95,7 @@ public class User {
     public void setBirthDate(LocalDateTime birthDate) {
         this.birthDate = birthDate;
     }
-
+*/
     //MONEY TRANSACTIONS
 
     public void transferInto(double ammount, User sender) {
@@ -113,5 +129,9 @@ public class User {
 
     public boolean isDefaulter() {
         return this.isDefaulter;
+    }
+
+    public String toString() {
+        return "email " + this.email + " | name " + this.name + " | lastname " + this.lastName + " | username " + this.username + " | password " + this.password;
     }
 }

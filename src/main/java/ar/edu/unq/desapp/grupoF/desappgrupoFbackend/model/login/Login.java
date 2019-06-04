@@ -11,9 +11,11 @@ public class Login {
     @Email(message = "Email should be valid")
     private String email;
 
+    /*
     @Size(min = 4, max = 10,
             message = " password must be between 4 and 10 characters")
     @Pattern(regexp = "^(?=.*\\d)(?=.*[A-Za-z])[A-Za-z0-9]{1,10}$")
+    */
     private String password;
 
     public Login() {}
@@ -32,5 +34,9 @@ public class Login {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String toString() {
+        return "email " + this.email + " | password " + this.password;
     }
 }
