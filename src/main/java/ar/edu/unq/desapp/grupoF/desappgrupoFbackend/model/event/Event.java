@@ -13,9 +13,15 @@ import java.util.stream.Collectors;
 @Entity
 public class Event {
 
+    public Long getId() {
+        return id;
+    }
+
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     Long id;
+    String name;
+    String description;
     @OneToMany(fetch= FetchType.LAZY,cascade=CascadeType.ALL)
     List<User> attendees = new ArrayList<User>();
     @OneToMany(fetch= FetchType.LAZY,cascade=CascadeType.ALL)
@@ -33,6 +39,10 @@ public class Event {
 
     public boolean isAttending(User person) {
         return this.attendees.contains(person);
+    }
+
+    public void setProductsNeeded(List<Item> productsNeeded) {
+        this.productsNeeded = productsNeeded;
     }
 
     public void addProductsNeeded(List<Item> productsNeeded) {
@@ -57,5 +67,26 @@ public class Event {
     }
 
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
 

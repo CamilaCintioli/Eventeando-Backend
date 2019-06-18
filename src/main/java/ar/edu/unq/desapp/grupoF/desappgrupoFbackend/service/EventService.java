@@ -15,7 +15,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
 
 @Service
 public class EventService {
@@ -51,6 +54,9 @@ public class EventService {
             eventDTO.setGuestsMails(this.mailsFromEventGuests(e));
             eventDTO.setProductsNeeded(e.getProductsNeeded());
             eventDTO.setEventType(e.getClass().getSimpleName());
+            eventDTO.setName(e.getName());
+            eventDTO.setDescription(e.getDescription());
+            eventDTO.setId(e.getId());
             eventsDTO.add(eventDTO);
         }
 
@@ -70,25 +76,31 @@ public class EventService {
     }
 
     private Event createEvent(EventDTO eventDTO, List<User> guests) {
+        Event event;
 
-        String eventType = eventDTO.getEventType();
-        Event event = new Collect();
+        if(!isNull(eventDTO.getId())){
+            event = eventRepository.getEventById(eventDTO.getId()).get();
+        } else {
+            String eventType = eventDTO.getEventType();
+
+            event = new Collect();
+
+            if (eventType.equals("party")) {
+                event = new Party();
 
 
-        if(eventType.equals("party")){
-            event = new Party();
-
-
+            }
+            if (eventType.equals("basket")) {
+                event = new Basket();
+            }
         }
-        if(eventType.equals("basket")){
-            event = new Basket();
-        }
-
-        System.out.println("----------------"+eventType+"------------------------------------------------------");
+//        System.out.println("----------------"+eventType+"------------------------------------------------------");
 
         System.out.println("----------------"+guests+"------------------------------------------------------");
         event.setGuests(guests);
-        event.addProductsNeeded(eventDTO.getProductsNeeded());
+        event.setProductsNeeded(eventDTO.getProductsNeeded());
+        event.setName(eventDTO.getName());
+        event.setDescription(eventDTO.getDescription());
 
         return event;
 
@@ -96,5 +108,17 @@ public class EventService {
 
     private List<String> mailsFromEventGuests(Event event) {
         return event.getGuests().stream().map(user -> user.getEmail()).collect(Collectors.toList());
+    }
+
+    public void deleteEvent(Long id) {
+        eventRepository.deleteById(id);
+    }
+
+    public Optional<EventDTO> getEvent(Long id) {
+        Optional<Event> maybeEvent = eventRepository.getEventById(id);
+        if(maybeEvent.isPresent()){
+            return Optional.of(new EventDTO(maybeEvent.get()));
+        }
+        return Optional.empty();
     }
 }
