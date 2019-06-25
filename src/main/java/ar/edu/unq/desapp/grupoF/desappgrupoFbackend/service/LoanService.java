@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.service;
 
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.economy.Account;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.economy.Loan;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.exceptions.ThereIsNoLoanException;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.exceptions.UserIsNotEligibleToReceiveALoanException;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository.AccountRepository;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository.LoanRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LoanService {
@@ -60,5 +62,18 @@ public class LoanService {
         for(Loan loan: loans){
             loan.getCurrentFee().charge(account);
         }
+    }
+
+    public Loan getLoan(String email) {
+
+        Optional<Loan> loan = Optional.ofNullable(loanRepository.findByUserEmail(email));
+
+        if(! loan.isPresent()){
+            throw new ThereIsNoLoanException("There is not loan for this user" + email);
+        }
+        return loan.get();
+
+        
+
     }
 }

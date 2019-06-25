@@ -26,6 +26,13 @@ public class LoanController {
 
     }
 
+    @GetMapping("loan/{email}")
+    public Loan getLoan(@PathVariable("email") String email){
+
+        return  loanService.getLoan(email);
+
+    }
+
 
 
 }

@@ -11,6 +11,5 @@ public interface LoanRepository extends CrudRepository<Loan,Long> {
 
     List<Loan> findAll();
 
-
-
+    Loan findByUserEmail(String email);
 }
