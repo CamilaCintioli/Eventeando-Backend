@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE})
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT})
 public class EventController {
 
     private final EventService eventService;
@@ -39,6 +39,15 @@ public class EventController {
         return eventService.getAllEvents();
     }
 
+    @RequestMapping("/event/{eventId}")
+    public ResponseEntity<EventDTO> get(@PathVariable Long eventId) {
+        Optional<EventDTO> maybeEventDTO = eventService.getEvent(eventId);
+        if (!maybeEventDTO.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(maybeEventDTO.get());
+    }
+
     @CrossOrigin(origins = "http://localhost:8081")
     @DeleteMapping("/event/delete/{eventId}")
     public String deleteEvent(@PathVariable String eventId) {
@@ -54,6 +63,7 @@ public class EventController {
         if(!maybeEventDTO.isPresent()){
             return ResponseEntity.badRequest().build();
         }
+        anEvent.setId(eventId);
         EventDTO eventoResultate = new EventDTO(eventService.saveEvent(anEvent));
         return ResponseEntity.ok(eventoResultate);
     }
