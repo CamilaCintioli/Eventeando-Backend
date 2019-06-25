@@ -3,7 +3,6 @@ package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.controller;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.dto.EventDTO;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +22,11 @@ public class EventController {
     }
 
 
-    @CrossOrigin(origins = "http://localhost:8081")
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(path="/event/new", consumes = MediaType.APPLICATION_JSON_VALUE)
     public EventDTO add(@RequestBody EventDTO anEvent){
-        System.out.println("EVENTO A CREAR");
-        System.out.println("nombre: " + anEvent.getName() + " | descripcion: " + anEvent.getDescription() + " | dtype: " + anEvent.getEventType());
+
+
         eventService.saveEvent(anEvent);
 
 

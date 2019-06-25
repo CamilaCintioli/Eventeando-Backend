@@ -1,21 +1,33 @@
 package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.economy;
 
-import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.User;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.Product;
 
+import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
 
+
+@Entity
 public class Loan {
 
-    User user;
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    Long id;
+    @Column
+    String userEmail;
+    @OneToOne(targetEntity = Product.class, cascade = CascadeType.ALL)
     private Fee currentFee;
+    @OneToMany(fetch= FetchType.LAZY,cascade=CascadeType.ALL)
     private List<Fee> fees;
 
-    public Loan(User user) {
-        this.user = user;
-        this.fees = Arrays.asList(new Fee(user), new Fee(user), new Fee(user), new Fee(user), new Fee(user), new Fee(user));
+    public Loan(){}
 
-        user.transferInto(1000d,null);
+    public Loan(String userEmail, Account account) {
+        this.userEmail = userEmail;
+        this.fees = Arrays.asList(new Fee(userEmail), new Fee(userEmail), new Fee(userEmail), new Fee(userEmail), new Fee(userEmail), new Fee(userEmail));
+
+
+        account.transferInto(1000d,null);
 
     }
 

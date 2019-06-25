@@ -24,15 +24,14 @@ public class User {
     @Column
     private LocalDateTime birthDate;
     */
-    //@OneToOne(targetEntity = Account.class, cascade=CascadeType.ALL)
-    @Transient
-    private Account account = new Account();
+    @OneToOne(targetEntity = Account.class, cascade=CascadeType.ALL)
+    private Account account;
     @Column
     private boolean isDefaulter = false;
     @Column
     private String username;
 
-    public User() {}
+    public User() { }
 
     public User(String username, String email, String name, String lastName, String password) {
         setUsername(username);
@@ -40,6 +39,7 @@ public class User {
         setName(name);
         setPassword(password);
         setLastName(lastName);
+
     }
 
     public String getUsername() { return username; }
@@ -86,8 +86,8 @@ public class User {
 
     //MONEY TRANSACTIONS
 
-    public void transferInto(double ammount, User sender) {
-        this.account.transferInto(ammount,sender);
+   public void transferInto(double ammount, String emailSender) {
+        this.account.transferInto(ammount,emailSender);
     }
 
     public void extract(double ammount){

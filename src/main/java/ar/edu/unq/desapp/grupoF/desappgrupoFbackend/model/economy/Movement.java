@@ -2,17 +2,29 @@ package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.economy;
 
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.User;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
 import static java.util.Objects.isNull;
 
+@Entity
 public class Movement {
 
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    Long id;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "movement_type")
     private MovementType movementType;
-    private User user;
+    @Column
+    private String user;
+    @Column
     private double ammount;
+    @Transient
     private Date date;
+
+    public Movement(){}
 
     public Movement(double ammount, MovementType movementType) {
         this.ammount = ammount;
@@ -20,7 +32,7 @@ public class Movement {
         this.date = new Date();
     }
 
-    public Movement(double ammount, MovementType movementType, User user) {
+    public Movement(double ammount, MovementType movementType, String user) {
         this.ammount = ammount;
         this.movementType = movementType;
         this.user = user;
@@ -31,7 +43,7 @@ public class Movement {
         return movementType;
     }
 
-    public User getUser() {
+    public String getUser() {
         return user;
     }
 

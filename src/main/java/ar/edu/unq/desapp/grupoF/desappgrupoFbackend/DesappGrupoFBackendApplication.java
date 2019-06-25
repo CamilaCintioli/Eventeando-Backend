@@ -1,13 +1,22 @@
 package ar.edu.unq.desapp.grupoF.desappgrupoFbackend;
 
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.economy.Account;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.factory.UserBuilder;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository.AccountRepository;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository.UserRepository;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 @SpringBootApplication
+@PropertySources({
+		@PropertySource("classpath:application.properties"),
+		@PropertySource("classpath:auth0.properties")
+})
 public class DesappGrupoFBackendApplication {
 
 	//@Autowired
@@ -37,6 +46,8 @@ public class DesappGrupoFBackendApplication {
 						.get()
 		);
 
+
+
 		userRepository.save(
 				anyBuilderUser
 						.anyUser()
@@ -48,6 +59,10 @@ public class DesappGrupoFBackendApplication {
 		);
 
 		return anyBuilderUser;
+
+
+
+
 
 	}
 	/*
