@@ -24,7 +24,7 @@ public class Loan {
 
     public Loan(String userEmail, Account account) {
         this.userEmail = userEmail;
-        this.fees = Arrays.asList(new Fee(userEmail), new Fee(userEmail), new Fee(userEmail), new Fee(userEmail), new Fee(userEmail), new Fee(userEmail));
+        this.fees = Arrays.asList(new Fee(userEmail), new Fee(userEmail), new Fee(userEmail), new Fee(userEmail), new Fee(userEmail));
 
 
         account.transferInto(1000d,null);
