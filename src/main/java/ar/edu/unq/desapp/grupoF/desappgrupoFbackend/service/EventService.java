@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,6 @@ public class EventService {
     public Event saveEvent(EventDTO eventDTO){
 
         List<User> guests = this.getEventGuests(eventDTO.getGuestsMails());
-
         Event event = this.createEvent(eventDTO, guests);
 
         eventRepository.save(event);
@@ -50,14 +50,9 @@ public class EventService {
         List<EventDTO> eventsDTO = new ArrayList<>();
 
         for (Event e : events) {
-            EventDTO eventDTO = new EventDTO();
-            eventDTO.setGuestsMails(this.mailsFromEventGuests(e));
-            eventDTO.setProductsNeeded(e.getProductsNeeded());
-            eventDTO.setEventType(e.getClass().getSimpleName());
-            eventDTO.setName(e.getName());
-            eventDTO.setDescription(e.getDescription());
-            eventDTO.setId(e.getId());
+            EventDTO eventDTO = new EventDTO(e);
             eventsDTO.add(eventDTO);
+
         }
 
         return  eventsDTO;
@@ -87,16 +82,14 @@ public class EventService {
 
             if (eventType.equals("party")) {
                 event = new Party();
-
+                ((Party) event).setDeadlineConfirmation(eventDTO.getDeadlineConfirmation());
 
             }
             if (eventType.equals("basket")) {
                 event = new Basket();
             }
         }
-//        System.out.println("----------------"+eventType+"------------------------------------------------------");
 
-        System.out.println("----------------"+guests+"------------------------------------------------------");
         event.setGuests(guests);
         event.setProductsNeeded(eventDTO.getProductsNeeded());
         event.setName(eventDTO.getName());
@@ -120,5 +113,24 @@ public class EventService {
             return Optional.of(new EventDTO(maybeEvent.get()));
         }
         return Optional.empty();
+    }
+
+    public EventDTO confirmAssistence(Long id, String email) {
+
+        User user = userRepository.findByEmail(email);
+
+        if(Objects.isNull(user)){
+            throw new RuntimeException("There is no user with the given email");
+        }
+
+        Optional<Event> event = eventRepository.findById(id);
+        if(event.isPresent()){
+            event.get().acceptAttendee(user);
+            eventRepository.save(event.get());
+            return new EventDTO(event.get());
+        } else{
+            throw new RuntimeException("That event does not exist");
+        }
+
     }
 }

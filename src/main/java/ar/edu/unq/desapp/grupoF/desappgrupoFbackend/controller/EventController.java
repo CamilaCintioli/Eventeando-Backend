@@ -66,4 +66,10 @@ public class EventController {
         EventDTO eventoResultate = new EventDTO(eventService.saveEvent(anEvent));
         return ResponseEntity.ok(eventoResultate);
     }
+
+    @PostMapping(path="/event/{eventId}/assist/{email}")
+    public EventDTO confirmAssitence(@PathVariable("eventId") String eventId, @PathVariable("email") String email){
+        Long id = Long.parseLong(eventId);
+        return eventService.confirmAssistence(id, email);
+    }
 }

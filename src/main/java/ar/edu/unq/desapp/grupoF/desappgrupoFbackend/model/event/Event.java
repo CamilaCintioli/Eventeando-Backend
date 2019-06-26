@@ -7,6 +7,7 @@ import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.mailing.EmailSender;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,6 +88,10 @@ public class Event {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<User> getAttendees() {
+        return this.attendees;
     }
 }
 
