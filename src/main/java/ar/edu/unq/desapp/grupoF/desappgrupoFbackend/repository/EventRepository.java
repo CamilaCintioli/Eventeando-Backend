@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +19,6 @@ public interface EventRepository extends CrudRepository<Event,Long> {
     List<Event> findAllByGuestsEmailOrderByAttendeeCounterDesc(String email);
 
     List<Event> findAllByGuestsEmailAndDayOfEventLessThanOrderByDayOfEventDesc(String email, LocalDateTime date);
+
+    List<Event> findAllByGuestsEmailAndDayOfEventGreaterThanOrderByDayOfEventAsc(String email, LocalDateTime date);
 }

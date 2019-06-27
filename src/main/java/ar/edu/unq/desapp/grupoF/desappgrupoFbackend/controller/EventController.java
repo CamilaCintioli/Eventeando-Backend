@@ -82,4 +82,9 @@ public class EventController {
         return eventService.getLastEvents(email);
     }
 
+    @GetMapping(path="/event/ongoing/{email}")
+    public List<EventDTO> getOngoingEvents(@PathVariable("email") String email){
+        return eventService.getOngoingEvents(email);
+    }
+
 }

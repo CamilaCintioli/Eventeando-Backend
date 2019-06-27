@@ -152,4 +152,9 @@ public class EventService {
         LocalDateTime date = LocalDateTime.now();
         return eventRepository.findAllByGuestsEmailAndDayOfEventLessThanOrderByDayOfEventDesc(email,date).stream().map(event -> new EventDTO(event)).collect(Collectors.toList());
     }
+
+    public List<EventDTO> getOngoingEvents(String email) {
+        LocalDateTime date = LocalDateTime.now();
+        return eventRepository.findAllByGuestsEmailAndDayOfEventGreaterThanOrderByDayOfEventAsc(email,date).stream().map(event -> new EventDTO(event)).collect(Collectors.toList());
+    }
 }
