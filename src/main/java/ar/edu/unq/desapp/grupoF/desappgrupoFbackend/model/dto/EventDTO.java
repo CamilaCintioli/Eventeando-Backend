@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.dto;
 
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.Item;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Basket;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Event;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Party;
 
@@ -22,7 +23,7 @@ public class EventDTO {
     LocalDateTime deadlineConfirmation;
     LocalDateTime dayOfEvent;
     Long attendeesCounter;
-    
+    List<String> reservedProducts;
     public EventDTO(){}
 
     public EventDTO(Event event) {
@@ -38,7 +39,9 @@ public class EventDTO {
         }
         this.attendeesCounter = event.getAttendeesCounter();
         this.dayOfEvent = event.getDayOfEvent();
-
+        if(this.eventType.equals("Basket")){
+            this.reservedProducts = ((Basket) event).getProductsReserved().stream().map(item -> item.getProduct().getName()).collect(Collectors.toList());
+        }
 
     }
 
@@ -138,5 +141,11 @@ public class EventDTO {
         return this.dayOfEvent;
     }
 
+    public void setReservedProducts(List<String> productsNameReserved){
+        this.reservedProducts = productsNameReserved;
+    }
 
+    public List<String> getReservedProducts(){
+        return this.reservedProducts;
+    }
 }

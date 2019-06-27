@@ -103,6 +103,10 @@ public class EventController {
         return eventService.getOngoingEvents(email,page);
     }
 
-
+    @PutMapping(path="/event/reserve/{eventId}/{productName}/{emailUser}")
+    public EventDTO reserveProductInEvent(@PathVariable("eventId") String eventId, @PathVariable("productName") String productName, @PathVariable("emailUser") String emailUser){
+        Long id = Long.parseLong(eventId);
+        return eventService.reserveProduct(id,productName,emailUser);
+    }
 
 }

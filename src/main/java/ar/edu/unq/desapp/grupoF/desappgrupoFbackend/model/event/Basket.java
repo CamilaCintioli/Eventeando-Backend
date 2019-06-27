@@ -32,6 +32,7 @@ public class Basket extends Event{
     public void reserve(Item item, User person) throws ItemAlreadyReservedException {
         if(!this.productsReserved.containsKey(item)) {
             this.productsReserved.put(item,person);
+            this.productsNeeded.remove(item);
         } else {
             throw new ItemAlreadyReservedException(item,person);
         }

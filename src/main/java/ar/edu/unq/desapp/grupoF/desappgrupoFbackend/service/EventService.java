@@ -167,5 +167,41 @@ public class EventService {
                 .map(EventDTO::new);
     }
 
+    public EventDTO reserveProduct(Long id, String productName, String emailUser) {
 
+        Optional<Event> eventOptional = eventRepository.getEventById(id);
+        User user = userRepository.findByEmail(emailUser);
+        EventDTO eventDTO = new EventDTO();
+
+        if(eventOptional.isPresent() && !Objects.isNull(user)){
+
+            Basket basket = ((Basket) eventOptional.get());
+            Item item = this.findItemInBasket(basket,productName);
+
+            try {
+                basket.reserve(item,user);
+                eventRepository.save(basket);
+                eventDTO = new EventDTO(basket);
+
+            } catch (ItemAlreadyReservedException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            throw new RuntimeException("An event or user with given id does not exist");
+        }
+
+        return eventDTO;
+    }
+
+    private Item findItemInBasket(Basket basket, String productName) {
+
+        Optional<Item> optionalItem = basket.getProductsNeeded().stream().filter(item -> item.getProduct().getName().equals(productName)).findFirst();
+
+        if(!optionalItem.isPresent()){
+            throw new RuntimeException("There is no item with the given name in this event");
+        }
+
+        return optionalItem.get();
+    }
 }
