@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.User;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.mailing.EmailSender;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,7 @@ public class Event {
     @ManyToMany(fetch= FetchType.LAZY)
     List<User> guests = new ArrayList<>();
     Long attendeeCounter;
+    LocalDateTime dayOfEvent;
     @Transient
     EmailSender mailSender = new EmailSender();
 
@@ -103,6 +105,14 @@ public class Event {
 
     public Long getAttendeesCounter() {
         return this.attendeeCounter;
+    }
+
+    public void setDayOfEvent(LocalDateTime date){
+        this.dayOfEvent = date;
+    }
+
+    public LocalDateTime getDayOfEvent(){
+        return  this.dayOfEvent;
     }
 }
 

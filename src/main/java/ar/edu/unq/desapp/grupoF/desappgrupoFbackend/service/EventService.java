@@ -11,6 +11,7 @@ import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -92,6 +93,7 @@ public class EventService {
         event.setProductsNeeded(eventDTO.getProductsNeeded());
         event.setName(eventDTO.getName());
         event.setDescription(eventDTO.getDescription());
+        event.setDayOfEvent(eventDTO.getDayOfEvent());
 
         if(isNull(eventDTO.getAttendeesCounter())){
             event.setAttendeesCounter(0l);
@@ -144,5 +146,10 @@ public class EventService {
 
         return eventRepository.findAllByGuestsEmailOrderByAttendeeCounterDesc(email).stream().map(event -> new EventDTO(event)).collect(Collectors.toList());
 
+    }
+
+    public List<EventDTO> getLastEvents(String email) {
+        LocalDateTime date = LocalDateTime.now();
+        return eventRepository.findAllByGuestsEmailAndDayOfEventLessThanOrderByDayOfEventDesc(email,date).stream().map(event -> new EventDTO(event)).collect(Collectors.toList());
     }
 }

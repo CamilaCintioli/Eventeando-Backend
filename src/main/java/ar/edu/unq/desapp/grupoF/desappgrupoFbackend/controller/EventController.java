@@ -77,5 +77,9 @@ public class EventController {
         return eventService.getMostPopularEvents(email);
     }
 
+    @GetMapping(path="/event/last/{email}")
+    public List<EventDTO> getLastEvents(@PathVariable("email") String email){
+        return eventService.getLastEvents(email);
+    }
 
 }
