@@ -20,5 +20,5 @@ public interface EventRepository extends CrudRepository<Event,Long> {
 
     List<Event> findAllByGuestsEmailAndDayOfEventLessThanOrderByDayOfEventDesc(String email, LocalDateTime date);
 
-    List<Event> findAllByGuestsEmailAndDayOfEventGreaterThanOrderByDayOfEventAsc(String email, LocalDateTime date);
+    List<Event> findAllByGuestsEmailAndDayOfEventGreaterThanEqualOrderByDayOfEventAsc(String email, LocalDateTime date);
 }

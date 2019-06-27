@@ -154,7 +154,7 @@ public class EventService {
     }
 
     public List<EventDTO> getOngoingEvents(String email) {
-        LocalDateTime date = LocalDateTime.now();
-        return eventRepository.findAllByGuestsEmailAndDayOfEventGreaterThanOrderByDayOfEventAsc(email,date).stream().map(event -> new EventDTO(event)).collect(Collectors.toList());
+        LocalDateTime date = LocalDateTime.now().withHour(00).withMinute(00).withSecond(00).withNano(000);
+        return eventRepository.findAllByGuestsEmailAndDayOfEventGreaterThanEqualOrderByDayOfEventAsc(email,date).stream().map(event -> new EventDTO(event)).collect(Collectors.toList());
     }
 }
