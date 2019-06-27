@@ -1,14 +1,19 @@
 package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.service;
 
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.controller.RequestPage;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.Item;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.User;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.dto.EventDTO;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Basket;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Collect;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Event;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Party;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.exceptions.ItemAlreadyReservedException;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository.EventRepository;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -142,19 +147,25 @@ public class EventService {
 
     }
 
-    public List<EventDTO> getMostPopularEvents(String email) {
+    public Page<EventDTO> getMostPopularEvents(String email, RequestPage requestPage) {
 
-        return eventRepository.findAllByGuestsEmailOrderByAttendeeCounterDesc(email).stream().map(event -> new EventDTO(event)).collect(Collectors.toList());
+        return eventRepository.findAllByGuestsEmailOrderByAttendeeCounterDesc(email, PageRequest.of(requestPage.getIndex(),requestPage.getSize()))
+                .map(EventDTO::new);
 
     }
 
-    public List<EventDTO> getLastEvents(String email) {
+    public Page<EventDTO> getLastEvents(String email, RequestPage requestPage) {
         LocalDateTime date = LocalDateTime.now();
-        return eventRepository.findAllByGuestsEmailAndDayOfEventLessThanOrderByDayOfEventDesc(email,date).stream().map(event -> new EventDTO(event)).collect(Collectors.toList());
+        return eventRepository.findAllByGuestsEmailAndDayOfEventLessThanOrderByDayOfEventDesc(email,date,PageRequest.of(requestPage.getIndex(),requestPage.getSize()))
+                .map(EventDTO::new);
     }
 
-    public List<EventDTO> getOngoingEvents(String email) {
+    public Page<EventDTO> getOngoingEvents(String email, RequestPage requestPage) {
         LocalDateTime date = LocalDateTime.now().withHour(00).withMinute(00).withSecond(00).withNano(000);
-        return eventRepository.findAllByGuestsEmailAndDayOfEventGreaterThanEqualOrderByDayOfEventAsc(email,date).stream().map(event -> new EventDTO(event)).collect(Collectors.toList());
+
+        return eventRepository.findAllByGuestsEmailAndDayOfEventGreaterThanEqualOrderByDayOfEventAsc(email,date,PageRequest.of(requestPage.getIndex(),requestPage.getSize()))
+                .map(EventDTO::new);
     }
+
+
 }

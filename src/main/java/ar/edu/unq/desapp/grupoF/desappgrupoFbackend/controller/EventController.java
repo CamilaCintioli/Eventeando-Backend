@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.controller;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.dto.EventDTO;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -72,19 +73,36 @@ public class EventController {
         return eventService.confirmAssistence(id, email);
     }
 
-    @GetMapping(path = "/event/popular/{email}")
-    public List<EventDTO> getMostPopularEvents(@PathVariable("email") String email){
-        return eventService.getMostPopularEvents(email);
+    @GetMapping(path = "/event/popular/{email}/{index}/{size}")
+    public Page<EventDTO> getMostPopularEvents(@PathVariable("email") String email, @PathVariable("index") int index, @PathVariable("size") int size){
+
+        RequestPage page = new RequestPage();
+        page.setIndex(index);
+        page.setSize(size);
+
+        return eventService.getMostPopularEvents(email, page);
     }
 
-    @GetMapping(path="/event/last/{email}")
-    public List<EventDTO> getLastEvents(@PathVariable("email") String email){
-        return eventService.getLastEvents(email);
+    @GetMapping(path="/event/last/{email}/{index}/{size}")
+    public Page<EventDTO> getLastEvents(@PathVariable("email") String email, @PathVariable("index") int index, @PathVariable("size") int size){
+
+        RequestPage page = new RequestPage();
+        page.setIndex(index);
+        page.setSize(size);
+
+        return eventService.getLastEvents(email,page);
     }
 
-    @GetMapping(path="/event/ongoing/{email}")
-    public List<EventDTO> getOngoingEvents(@PathVariable("email") String email){
-        return eventService.getOngoingEvents(email);
+    @GetMapping(path="/event/ongoing/{email}/{index}/{size}")
+    public Page<EventDTO> getOngoingEvents(@PathVariable("email") String email, @PathVariable("index") int index, @PathVariable("size") int size){
+
+        RequestPage page = new RequestPage();
+        page.setIndex(index);
+        page.setSize(size);
+
+        return eventService.getOngoingEvents(email,page);
     }
+
+
 
 }

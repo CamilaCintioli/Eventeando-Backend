@@ -3,7 +3,6 @@ package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.dto;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.Item;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Event;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Party;
-import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,8 +22,7 @@ public class EventDTO {
     LocalDateTime deadlineConfirmation;
     LocalDateTime dayOfEvent;
     Long attendeesCounter;
-
-
+    
     public EventDTO(){}
 
     public EventDTO(Event event) {
@@ -40,6 +38,7 @@ public class EventDTO {
         }
         this.attendeesCounter = event.getAttendeesCounter();
         this.dayOfEvent = event.getDayOfEvent();
+
 
     }
 
