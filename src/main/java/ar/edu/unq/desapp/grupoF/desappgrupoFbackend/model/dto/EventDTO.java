@@ -19,7 +19,8 @@ public class EventDTO {
     List<String> guestsMails;
     String eventType;
     List<String> attendees;
-    private LocalDateTime deadlineConfirmation;
+    LocalDateTime deadlineConfirmation;
+    Long attendeesCounter;
 
 
     public EventDTO(){}
@@ -35,6 +36,7 @@ public class EventDTO {
         if(this.eventType.equals("Party")){
             this.deadlineConfirmation = ((Party) event).getConfirmationDeadline();
         }
+        this.attendeesCounter = event.getAttendeesCounter();
 
     }
 
@@ -112,5 +114,12 @@ public class EventDTO {
 
     }
 
+    public void setAttendeesCounter(Long attendeesCounter){
+        this.attendeesCounter = attendeesCounter;
+    }
+
+    public Long getAttendeesCounter(){
+        return this.attendeesCounter;
+    }
 
 }

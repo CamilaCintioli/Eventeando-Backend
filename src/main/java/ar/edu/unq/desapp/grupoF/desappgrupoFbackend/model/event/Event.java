@@ -5,14 +5,14 @@ import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.User;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.mailing.EmailSender;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
 public class Event {
+
+
 
     public Long getId() {
         return id;
@@ -29,6 +29,7 @@ public class Event {
     List<Item> productsNeeded = new ArrayList<Item>();
     @ManyToMany(fetch= FetchType.LAZY)
     List<User> guests = new ArrayList<>();
+    Long attendeeCounter;
     @Transient
     EmailSender mailSender = new EmailSender();
 
@@ -36,6 +37,7 @@ public class Event {
 
     public void acceptAttendee(User person) {
         this.attendees.add(person);
+
     }
 
     public boolean isAttending(User person) {
@@ -92,6 +94,15 @@ public class Event {
 
     public List<User> getAttendees() {
         return this.attendees;
+    }
+
+
+    public void setAttendeesCounter(Long attendeesCounter) {
+        this.attendeeCounter = attendeesCounter;
+    }
+
+    public Long getAttendeesCounter() {
+        return this.attendeeCounter;
     }
 }
 

@@ -7,12 +7,10 @@ import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Collect;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Event;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Party;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository.EventRepository;
-import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository.PartyRepository;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -95,6 +93,13 @@ public class EventService {
         event.setName(eventDTO.getName());
         event.setDescription(eventDTO.getDescription());
 
+        if(isNull(eventDTO.getAttendeesCounter())){
+            event.setAttendeesCounter(0l);
+        } else {
+            event.setAttendeesCounter(eventDTO.getAttendeesCounter());
+        }
+
+
         return event;
 
     }
@@ -126,11 +131,18 @@ public class EventService {
         Optional<Event> event = eventRepository.findById(id);
         if(event.isPresent()){
             event.get().acceptAttendee(user);
+            event.get().setAttendeesCounter(event.get().getAttendeesCounter()+1);
             eventRepository.save(event.get());
             return new EventDTO(event.get());
         } else{
             throw new RuntimeException("That event does not exist");
         }
+
+    }
+
+    public List<EventDTO> getMostPopularEvents(String email) {
+
+        return eventRepository.findAllByGuestsEmailOrderByAttendeeCounterDesc(email).stream().map(event -> new EventDTO(event)).collect(Collectors.toList());
 
     }
 }

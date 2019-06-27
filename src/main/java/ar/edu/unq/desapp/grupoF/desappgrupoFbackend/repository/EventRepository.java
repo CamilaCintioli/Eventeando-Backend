@@ -11,7 +11,8 @@ import java.util.Optional;
 public interface EventRepository extends CrudRepository<Event,Long> {
 
     List<Event> findAll();
+
     Optional<Event> getEventById(Long id);
 
-
+    List<Event> findAllByGuestsEmailOrderByAttendeeCounterDesc(String email);
 }

@@ -26,7 +26,6 @@ public class EventController {
     @PostMapping(path="/event/new", consumes = MediaType.APPLICATION_JSON_VALUE)
     public EventDTO add(@RequestBody EventDTO anEvent){
 
-
         eventService.saveEvent(anEvent);
 
 
@@ -72,4 +71,11 @@ public class EventController {
         Long id = Long.parseLong(eventId);
         return eventService.confirmAssistence(id, email);
     }
+
+    @GetMapping(path = "/event/popular/{email}")
+    public List<EventDTO> getMostPopularEvents(@PathVariable("email") String email){
+        return eventService.getMostPopularEvents(email);
+    }
+
+
 }
