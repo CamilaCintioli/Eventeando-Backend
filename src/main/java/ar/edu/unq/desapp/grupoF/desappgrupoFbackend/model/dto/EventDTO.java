@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class EventDTO {
@@ -46,16 +47,33 @@ public class EventDTO {
     }
 
     public void setProductsNeeded(List<Item> productsNeeded) {
+
+        for(Item i : productsNeeded){
+            if(i.getProduct()==null||i.getProduct().getName()==null||i.getProduct().getPrice()==null||i.getAmount()==null){
+                throw new RuntimeException("Products needed only accept items");
+            }
+        }
+
         this.productsNeeded = productsNeeded;
     }
-
 
     public List<String> getGuestsMails() {
         return guestsMails;
     }
 
     public void setGuestsMails(List<String> guestsMails) {
-        this.guestsMails = guestsMails;
+
+        if(guestsMails == null || guestsMails.size()==0){
+            throw new RuntimeException("There should be at least one guest to the event");
+        }
+
+        if(guestsMails.stream().filter(email -> this.checkEmail(email)).count() == guestsMails.size()){
+            this.guestsMails = guestsMails;
+        }
+        else {
+            throw new RuntimeException("The guests mails are not valid");
+        }
+
     }
 
     public List<Item> getProductsNeeded() {
@@ -67,7 +85,13 @@ public class EventDTO {
     }
 
     public void setEventType(String eventType){
-        this.eventType = eventType;
+        if(eventType.equals("Party")||eventType.equals("Basket")||eventType.equals("Collect")){
+            this.eventType = eventType;
+        }
+        else {
+            throw new RuntimeException("The type: " + eventType + " is not valid");
+        }
+
     }
 
 
@@ -76,6 +100,9 @@ public class EventDTO {
     }
 
     public void setName(String name) {
+        if(name==null){
+            throw new RuntimeException("The event name should be given");
+        }
         this.name = name;
     }
 
@@ -96,7 +123,13 @@ public class EventDTO {
     }
 
     public void setAttendees(List<String> emailsAttendees){
-        this.attendees = emailsAttendees;
+
+        if(emailsAttendees.stream().filter(email -> this.checkEmail(email)).count() == emailsAttendees.size()){
+            this.attendees = emailsAttendees;
+        }
+        else {
+            throw new RuntimeException("The attendees mails are not valid");
+        }
     }
 
     public List<String> getAttendees(){
@@ -128,6 +161,12 @@ public class EventDTO {
     }
 
     public void setDayOfEvent(String date){
+
+        if(date==null){
+            throw new RuntimeException("The event needs a day");
+        }
+
+
         String dateTime = date + " 00:00";
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -148,4 +187,19 @@ public class EventDTO {
     public List<String> getReservedProducts(){
         return this.reservedProducts;
     }
+
+    private boolean checkEmail(String email) {
+
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                "[a-zA-Z0-9_+&*-]+)*@" +
+                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                "A-Z]{2,7}$";
+
+        Pattern pat = Pattern.compile(emailRegex);
+        if (email == null)
+            return false;
+        return pat.matcher(email).matches();
+    }
+
+
 }

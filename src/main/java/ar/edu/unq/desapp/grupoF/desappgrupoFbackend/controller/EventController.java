@@ -49,64 +49,80 @@ public class EventController {
 
     @CrossOrigin(origins = "http://localhost:8081")
     @DeleteMapping("/event/delete/{eventId}")
-    public String deleteEvent(@PathVariable String eventId) {
-        Long id = Long.parseLong(eventId);
-        eventService.deleteEvent(id);
-        return String.format("Eliminado evento de id: %d", id);
+    public ResponseEntity<String> deleteEvent(@PathVariable String eventId) {
+
+        return eventService.deleteEvent(eventId);
+
     }
 
     @CrossOrigin(origins = "http://localhost:8081")
     @PutMapping(path="/event/edit/{eventId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EventDTO> edit(@RequestBody EventDTO anEvent, @PathVariable Long eventId){
+    public ResponseEntity edit(@RequestBody EventDTO anEvent, @PathVariable Long eventId){
         Optional<EventDTO> maybeEventDTO = eventService.getEvent(eventId);
         if(!maybeEventDTO.isPresent()){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("There is no event with given id");
         }
         anEvent.setId(eventId);
-        EventDTO eventoResultate = new EventDTO(eventService.saveEvent(anEvent));
-        return ResponseEntity.ok(eventoResultate);
+        EventDTO editedEvent = new EventDTO(eventService.saveEvent(anEvent));
+        return ResponseEntity.ok(editedEvent);
     }
 
     @PostMapping(path="/event/{eventId}/assist/{email}")
-    public EventDTO confirmAssitence(@PathVariable("eventId") String eventId, @PathVariable("email") String email){
-        Long id = Long.parseLong(eventId);
-        return eventService.confirmAssistence(id, email);
+    public ResponseEntity confirmAssitence(@PathVariable("eventId") String eventId, @PathVariable("email") String email){
+
+        return eventService.confirmAssistence(eventId, email);
     }
 
     @GetMapping(path = "/event/popular/{email}/{index}/{size}")
-    public Page<EventDTO> getMostPopularEvents(@PathVariable("email") String email, @PathVariable("index") int index, @PathVariable("size") int size){
+    public ResponseEntity getMostPopularEvents(@PathVariable("email") String email, @PathVariable("index") int index, @PathVariable("size") int size){
 
         RequestPage page = new RequestPage();
-        page.setIndex(index);
-        page.setSize(size);
+
+        try{
+            page.setIndex(index);
+            page.setSize(size);
+        }
+        catch (Exception e){
+            ResponseEntity.badRequest().body(e.getMessage());
+        }
 
         return eventService.getMostPopularEvents(email, page);
     }
 
     @GetMapping(path="/event/last/{email}/{index}/{size}")
-    public Page<EventDTO> getLastEvents(@PathVariable("email") String email, @PathVariable("index") int index, @PathVariable("size") int size){
+    public ResponseEntity getLastEvents(@PathVariable("email") String email, @PathVariable("index") int index, @PathVariable("size") int size){
 
         RequestPage page = new RequestPage();
-        page.setIndex(index);
-        page.setSize(size);
+        try{
+            page.setIndex(index);
+            page.setSize(size);
+        }
+        catch (Exception e){
+            ResponseEntity.badRequest().body("The index ans size of the page should be a number");
+        }
 
         return eventService.getLastEvents(email,page);
     }
 
     @GetMapping(path="/event/ongoing/{email}/{index}/{size}")
-    public Page<EventDTO> getOngoingEvents(@PathVariable("email") String email, @PathVariable("index") int index, @PathVariable("size") int size){
+    public ResponseEntity getOngoingEvents(@PathVariable("email") String email, @PathVariable("index") int index, @PathVariable("size") int size){
 
         RequestPage page = new RequestPage();
-        page.setIndex(index);
-        page.setSize(size);
+        try{
+            page.setIndex(index);
+            page.setSize(size);
+        }
+        catch (Exception e){
+            ResponseEntity.badRequest().body("The index ans size of the page should be a number");
+        }
 
         return eventService.getOngoingEvents(email,page);
     }
 
     @PutMapping(path="/event/reserve/{eventId}/{productName}/{emailUser}")
-    public EventDTO reserveProductInEvent(@PathVariable("eventId") String eventId, @PathVariable("productName") String productName, @PathVariable("emailUser") String emailUser){
-        Long id = Long.parseLong(eventId);
-        return eventService.reserveProduct(id,productName,emailUser);
+    public ResponseEntity reserveProductInEvent(@PathVariable("eventId") String eventId, @PathVariable("productName") String productName, @PathVariable("emailUser") String emailUser){
+
+        return eventService.reserveProduct(eventId,productName,emailUser);
     }
 
 }

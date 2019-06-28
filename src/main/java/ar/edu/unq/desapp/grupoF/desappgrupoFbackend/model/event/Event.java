@@ -38,8 +38,12 @@ public class Event {
     public Event(){}
 
     public void acceptAttendee(User person) {
-        this.attendees.add(person);
-
+        if(this.guests.contains(person)){
+            this.attendees.add(person);
+        }
+        else {
+            throw new RuntimeException("The user can assist an event if is not invited");
+        }
     }
 
     public boolean isAttending(User person) {
