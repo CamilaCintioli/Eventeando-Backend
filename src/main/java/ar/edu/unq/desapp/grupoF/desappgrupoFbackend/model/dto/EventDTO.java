@@ -25,6 +25,9 @@ public class EventDTO {
     LocalDateTime dayOfEvent;
     Long attendeesCounter;
     List<String> reservedProducts;
+    String creatorEmail;
+    List<Item> missingProducts;
+
     public EventDTO(){}
 
     public EventDTO(Event event) {
@@ -35,14 +38,18 @@ public class EventDTO {
         this.guestsMails = event.getGuests().stream().map(user -> user.getEmail()).collect(Collectors.toList());
         this.eventType = event.getClass().getSimpleName();
         this.attendees = event.getAttendees().stream().map(user -> user.getEmail()).collect(Collectors.toList());
+        this.creatorEmail = event.getCreatorEmail();
         if(this.eventType.equals("Party")){
             this.deadlineConfirmation = ((Party) event).getConfirmationDeadline();
         }
         this.attendeesCounter = event.getAttendeesCounter();
         this.dayOfEvent = event.getDayOfEvent();
         if(this.eventType.equals("Basket")){
-            this.reservedProducts = ((Basket) event).getProductsReserved().stream().map(item -> item.getProduct().getName()).collect(Collectors.toList());
+            this.reservedProducts = ((Basket) event).getProductsReserved().stream().map(item -> item.getProduct().getName() + " - " + ((Basket) event).reservas().get(item).getEmail()).collect(Collectors.toList());
+            this.missingProducts =  ((Basket) event).productsMissing();
         }
+
+
 
     }
 
@@ -199,6 +206,26 @@ public class EventDTO {
         if (email == null)
             return false;
         return pat.matcher(email).matches();
+    }
+
+    public void setCreatorEmail(String email){
+
+        if(!this.checkEmail(email)|| email == null) throw new RuntimeException("The mail of the creator is not valid.");
+
+        this.creatorEmail = email;
+
+    }
+
+    public String getCreatorEmail(){
+        return this.creatorEmail;
+    }
+
+    public List<Item> getMissingProducts(){
+        return this.missingProducts;
+    }
+
+    public void setMissingProducts(List<Item> missingProducts){
+        this.missingProducts = missingProducts;
     }
 
 

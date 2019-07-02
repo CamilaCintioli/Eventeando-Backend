@@ -77,6 +77,9 @@ public class EventService {
 
             if (eventType.equals("Party")) {
                 event = new Party();
+                if(eventDTO.getDeadlineConfirmation() == null){
+                    throw new RuntimeException("Si el evento es una fiesta, por favor complete la fecha limite para confirmar");
+                }
                 ((Party) event).setDeadlineConfirmation(eventDTO.getDeadlineConfirmation());
 
             }
@@ -90,6 +93,12 @@ public class EventService {
         event.setName(eventDTO.getName());
         event.setDescription(eventDTO.getDescription());
         event.setDayOfEvent(eventDTO.getDayOfEvent());
+
+        if(eventDTO.getCreatorEmail()==null) throw new RuntimeException("The event must have a creator email");
+
+        event.setCreatorEmail(eventDTO.getCreatorEmail());
+
+
 
         if(isNull(eventDTO.getAttendeesCounter())){
             event.setAttendeesCounter(0l);
@@ -115,7 +124,7 @@ public class EventService {
             eventRepository.deleteById(id);
         }
         catch (Exception e){
-            return  ResponseEntity.badRequest().body("There is no event with the given id: " + id);
+            return  ResponseEntity.badRequest().body(e.getMessage());
         }
 
         return ResponseEntity.ok("The event"+ eventId +"was successfully deleted");

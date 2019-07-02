@@ -13,9 +13,11 @@ import java.util.Map;
 @Entity
 public class Basket extends Event{
 
-    @ElementCollection
-    @CollectionTable(name="BASKET_RESERVED_PRODUCTS")
-    @Column(name="USER_ID")
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name="ITEM_USER",
+            joinColumns=@JoinColumn(name="PRODUCTS_RESERVED"),
+            inverseJoinColumns=@JoinColumn(name="USER_ID", unique=false),
+            uniqueConstraints=@UniqueConstraint(columnNames = {"PRODUCTS_RESERVED", "ITEM_ID"}))
     @MapKeyJoinColumn(name="ITEM_ID")
     Map<Item, User> productsReserved = new HashMap<Item,User>();
 
@@ -32,7 +34,6 @@ public class Basket extends Event{
     public void reserve(Item item, User person) throws ItemAlreadyReservedException {
         if(!this.productsReserved.containsKey(item)) {
             this.productsReserved.put(item,person);
-            this.productsNeeded.remove(item);
         } else {
             throw new ItemAlreadyReservedException(item,person);
         }

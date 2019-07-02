@@ -24,7 +24,7 @@ public class Event {
     Long id;
     String name;
     String description;
-    @OneToMany(fetch= FetchType.LAZY,cascade=CascadeType.ALL)
+    @ManyToMany(fetch= FetchType.LAZY,cascade=CascadeType.ALL)
     List<User> attendees = new ArrayList<User>();
     @OneToMany(fetch= FetchType.LAZY,cascade=CascadeType.ALL)
     List<Item> productsNeeded = new ArrayList<Item>();
@@ -32,6 +32,7 @@ public class Event {
     List<User> guests = new ArrayList<>();
     Long attendeeCounter;
     LocalDateTime dayOfEvent;
+    String creatorEmail;
     @Transient
     EmailSender mailSender = new EmailSender();
 
@@ -117,6 +118,14 @@ public class Event {
 
     public LocalDateTime getDayOfEvent(){
         return  this.dayOfEvent;
+    }
+
+    public String getCreatorEmail(){
+        return this.creatorEmail;
+    }
+
+    public void setCreatorEmail(String email){
+        this.creatorEmail=email;
     }
 }
 
