@@ -211,7 +211,8 @@ public class EventDTO {
     public void setCreatorEmail(String email){
 
         if(!this.checkEmail(email)|| email == null) throw new RuntimeException("The mail of the creator is not valid.");
-
+        System.out.println("CREATOR EMAIL");
+        System.out.println(email);
         this.creatorEmail = email;
 
     }
@@ -228,5 +229,9 @@ public class EventDTO {
         this.missingProducts = missingProducts;
     }
 
+    @Override
+    public String toString() {
+        return String.format( "id: " + id + " | name: " + name + " | creatorEmail: " + creatorEmail + " | dayOfEvent: " + dayOfEvent );
+    }
 
 }
