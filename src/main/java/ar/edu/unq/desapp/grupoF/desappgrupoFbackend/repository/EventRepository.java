@@ -2,7 +2,6 @@ package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.repository;
 
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Event;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -18,9 +17,13 @@ public interface EventRepository extends CrudRepository<Event,Long> {
 
     Optional<Event> getEventById(Long id);
 
-    Page<Event> findAllByGuestsEmailOrderByAttendeeCounterDesc(String email, Pageable pageable);
+    //POPULAR EVENTS
+    Page<Event> findDistinctEventByDayOfEventGreaterThanAndCreatorEmailOrDayOfEventGreaterThanAndGuestsOrderByAttendeeCounterDesc(LocalDateTime dayOfEvent, String creatorEmail, LocalDateTime date, String guest, Pageable pageable);
 
-    Page<Event> findAllByGuestsEmailAndDayOfEventLessThanOrderByDayOfEventDesc(String email, LocalDateTime date, Pageable pageable);
+    //ONGOING EVENTS
+    Page<Event> findDistinctEventByDayOfEventGreaterThanAndCreatorEmailOrDayOfEventGreaterThanAndGuests(LocalDateTime dayOfEvent, String creatorEmail, LocalDateTime date, String guest, Pageable pageable);
 
-    Page<Event> findAllByGuestsEmailAndDayOfEventGreaterThanEqualOrderByDayOfEventAsc(String email, LocalDateTime date, Pageable pageable);
+    //LAST EVENT
+    Page<Event> findDistinctEventByDayOfEventLessThanAndCreatorEmailOrDayOfEventLessThanAndGuests(LocalDateTime dayOfEvent, String creatorEmail, LocalDateTime date, String guest, Pageable pageable);
+    
 }
