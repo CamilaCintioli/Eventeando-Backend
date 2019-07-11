@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.service;
 
-import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.controller.RequestPage;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.pagination.RequestPage;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.Item;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.User;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.annotation.LogExecutionTime;

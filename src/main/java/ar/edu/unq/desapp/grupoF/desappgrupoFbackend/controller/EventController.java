@@ -2,9 +2,9 @@ package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.controller;
 
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.dto.EventDTO;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Event;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.pagination.RequestPage;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

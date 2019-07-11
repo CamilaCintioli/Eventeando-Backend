@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.controller;
+package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.pagination;
 
 public class RequestPage {
 

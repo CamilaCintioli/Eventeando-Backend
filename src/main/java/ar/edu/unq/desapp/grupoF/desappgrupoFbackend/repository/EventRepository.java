@@ -25,5 +25,5 @@ public interface EventRepository extends CrudRepository<Event,Long> {
 
     //LAST EVENT
     Page<Event> findDistinctEventByDayOfEventLessThanAndCreatorEmailOrDayOfEventLessThanAndGuests(LocalDateTime dayOfEvent, String creatorEmail, LocalDateTime date, String guest, Pageable pageable);
-    
+
 }

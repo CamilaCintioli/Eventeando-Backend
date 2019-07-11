@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.controller;
+package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.security;
 
 import com.auth0.spring.security.api.JwtWebSecurityConfigurer;
 import org.springframework.beans.factory.annotation.Value;
