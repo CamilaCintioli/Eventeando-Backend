@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoF.desappgrupoFbackend.service;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.controller.RequestPage;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.Item;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.User;
+import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.annotation.LogExecutionTime;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.dto.EventDTO;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Basket;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Collect;
@@ -29,19 +30,27 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final InvitationService invitationService;
 
     @Autowired
-    public EventService(EventRepository eventRepository, UserRepository userRepository) {
+    public EventService(EventRepository eventRepository, UserRepository userRepository, InvitationService invitationService) {
         this.eventRepository = eventRepository;
         this.userRepository=userRepository;
+        this.invitationService = invitationService;
     }
 
 
+    @LogExecutionTime
     public Event saveEvent(EventDTO eventDTO){
 
         Event event = this.createEvent(eventDTO);
-
         eventRepository.save(event);
+
+        try {
+            invitationService.sendInvitations(event.getGuests(),event.getCreatorEmail());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         return event;
     }
@@ -53,18 +62,10 @@ public class EventService {
 
     }
 
-    private List<User> getEventGuests(List<String> guestsMails) {
-
-        this.validateEmails(guestsMails);
-
-        return guestsMails.stream().map(mail -> userRepository.findByEmail(mail)).filter(user -> user!=null).collect(Collectors.toList());
-
-
-    }
 
     private Event createEvent(EventDTO eventDTO) {
 
-        List<User> guests = this.getEventGuests(eventDTO.getGuestsMails());
+       this.validateEmails(eventDTO.getGuestsMails());
 
         Event event;
 
@@ -88,7 +89,7 @@ public class EventService {
             }
         }
 
-        event.setGuests(guests);
+        event.setGuests(eventDTO.getGuestsMails());
         event.setProductsNeeded(eventDTO.getProductsNeeded());
         event.setName(eventDTO.getName());
         event.setDescription(eventDTO.getDescription());
@@ -97,7 +98,6 @@ public class EventService {
         if(eventDTO.getCreatorEmail()==null) throw new RuntimeException("The event must have a creator email");
 
         event.setCreatorEmail(eventDTO.getCreatorEmail());
-
 
 
         if(isNull(eventDTO.getAttendeesCounter())){
@@ -110,6 +110,7 @@ public class EventService {
 
     }
 
+    @LogExecutionTime
     public ResponseEntity<String> deleteEvent(String eventId) {
 
         Long id;
@@ -130,6 +131,7 @@ public class EventService {
         return ResponseEntity.ok("The event"+ eventId +"was successfully deleted");
     }
 
+    @LogExecutionTime
     public Optional<EventDTO> getEvent(Long id) {
         Optional<Event> maybeEvent = eventRepository.getEventById(id);
         if(maybeEvent.isPresent()){
@@ -138,6 +140,7 @@ public class EventService {
         return Optional.empty();
     }
 
+    @LogExecutionTime
     public ResponseEntity confirmAssistence(String eventId, String email) {
 
         Long id;
@@ -173,31 +176,36 @@ public class EventService {
 
     }
 
+    @LogExecutionTime
     public ResponseEntity getMostPopularEvents(String email, RequestPage requestPage) {
 
-        Page<EventDTO> events = eventRepository.findAllByGuestsEmailOrderByAttendeeCounterDesc(email, PageRequest.of(requestPage.getIndex(),requestPage.getSize()))
+        LocalDateTime date = LocalDateTime.now();
+        Page<EventDTO> events = eventRepository.findDistinctEventByDayOfEventGreaterThanAndCreatorEmailOrDayOfEventGreaterThanAndGuestsOrderByAttendeeCounterDesc(date,email, date, email,PageRequest.of(requestPage.getIndex(),requestPage.getSize()))
                 .map(EventDTO::new);
 
         return ResponseEntity.ok(events);
     }
 
+    @LogExecutionTime
     public ResponseEntity getLastEvents(String email, RequestPage requestPage) {
         LocalDateTime date = LocalDateTime.now();
-        Page<EventDTO> events = eventRepository.findAllByGuestsEmailAndDayOfEventLessThanOrderByDayOfEventDesc(email,date,PageRequest.of(requestPage.getIndex(),requestPage.getSize()))
+        Page<EventDTO> events = eventRepository.findDistinctEventByDayOfEventLessThanAndCreatorEmailOrDayOfEventLessThanAndGuests(date,email, date, email,PageRequest.of(requestPage.getIndex(),requestPage.getSize()))
                 .map(EventDTO::new);
 
         return ResponseEntity.ok(events);
     }
 
+    @LogExecutionTime
     public ResponseEntity getOngoingEvents(String email, RequestPage requestPage) {
         LocalDateTime date = LocalDateTime.now().withHour(00).withMinute(00).withSecond(00).withNano(000);
 
-        Page<EventDTO> events = eventRepository.findAllByGuestsEmailAndDayOfEventGreaterThanEqualOrderByDayOfEventAsc(email,date,PageRequest.of(requestPage.getIndex(),requestPage.getSize()))
+        Page<EventDTO> events = eventRepository.findDistinctEventByDayOfEventGreaterThanAndCreatorEmailOrDayOfEventGreaterThanAndGuests(date,email,date,email,PageRequest.of(requestPage.getIndex(),requestPage.getSize()))
                 .map(EventDTO::new);
 
         return ResponseEntity.ok(events);
     }
 
+    @LogExecutionTime
     public ResponseEntity reserveProduct(String  eventId, String productName, String emailUser) {
 
         Long id;

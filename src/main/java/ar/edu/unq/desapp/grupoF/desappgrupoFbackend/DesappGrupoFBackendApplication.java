@@ -11,12 +11,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @PropertySources({
 		@PropertySource("classpath:application.properties"),
 		@PropertySource("classpath:auth0.properties")
 })
+@EnableAsync
 public class DesappGrupoFBackendApplication {
 
 	//@Autowired
@@ -57,6 +59,17 @@ public class DesappGrupoFBackendApplication {
 						.withPassword("root")
 						.get()
 		);
+
+		userRepository.save(
+				anyBuilderUser
+						.anyUser()
+						.withName("Pepita")
+						.withEmail("pepita@gmail.com")
+						.withPassword("root")
+						.get()
+		);
+
+
 
 		return anyBuilderUser;
 
