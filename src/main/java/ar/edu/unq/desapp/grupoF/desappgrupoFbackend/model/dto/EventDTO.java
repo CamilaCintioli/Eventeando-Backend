@@ -35,7 +35,7 @@ public class EventDTO {
         this.name = event.getName();
         this.description = event.getDescription();
         this.productsNeeded = event.getProductsNeeded();
-        this.guestsMails = event.getGuests().stream().map(user -> user.getEmail()).collect(Collectors.toList());
+        this.guestsMails = event.getGuests();
         this.eventType = event.getClass().getSimpleName();
         this.attendees = event.getAttendees().stream().map(user -> user.getEmail()).collect(Collectors.toList());
         this.creatorEmail = event.getCreatorEmail();

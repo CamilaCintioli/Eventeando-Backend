@@ -28,8 +28,8 @@ public class Event {
     List<User> attendees = new ArrayList<User>();
     @OneToMany(fetch= FetchType.LAZY,cascade=CascadeType.ALL)
     List<Item> productsNeeded = new ArrayList<Item>();
-    @ManyToMany(fetch= FetchType.LAZY)
-    List<User> guests = new ArrayList<>();
+    @ElementCollection
+    List<String> guests = new ArrayList<>();
     Long attendeeCounter;
     LocalDateTime dayOfEvent;
     String creatorEmail;
@@ -61,18 +61,13 @@ public class Event {
 
     public List<Item> getProductsNeeded() { return this.productsNeeded; }
 
-    public void setGuests(List<User> guests)  {
+    public void setGuests(List<String> guests)  {
         this.guests = guests;
-
-        List<String> guestsMails = guests.stream().map(g -> g.getEmail()).collect(Collectors.toList());
-        String message = "Veni al evento con nosotros.";
-
-        //mailSender.sendEmail(guestsMails,"Invitacion", message);
 
     }
 
 
-    public List<User> getGuests() {
+    public List<String> getGuests() {
         return this.guests;
     }
 
