@@ -5,6 +5,10 @@ import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Basket;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Event;
 import ar.edu.unq.desapp.grupoF.desappgrupoFbackend.model.event.Party;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,16 +19,20 @@ import java.util.stream.Collectors;
 public class EventDTO {
 
     Long id;
+    @NotBlank
     String name;
     String description;
     List<Item> productsNeeded = new ArrayList<Item>();
-    List<String> guestsMails;
+    List<@Email(message = "The guests emails should be valid") String> guestsMails;
+    @NotNull
     String eventType;
     List<String> attendees;
     LocalDateTime deadlineConfirmation;
+    @Future
     LocalDateTime dayOfEvent;
     Long attendeesCounter;
     List<String> reservedProducts;
+    @Email(message = "Email should be valid")
     String creatorEmail;
     List<Item> missingProducts;
 
@@ -210,9 +218,7 @@ public class EventDTO {
 
     public void setCreatorEmail(String email){
 
-        if(!this.checkEmail(email)|| email == null) throw new RuntimeException("The mail of the creator is not valid.");
-        System.out.println("CREATOR EMAIL");
-        System.out.println(email);
+        //if(!this.checkEmail(email)|| email == null) throw new RuntimeException("The mail of the creator is not valid.");
         this.creatorEmail = email;
 
     }

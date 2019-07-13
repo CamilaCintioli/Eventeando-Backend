@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class EventController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(path="/event/new", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public EventDTO add(@RequestBody EventDTO anEvent){
+    public EventDTO add(@RequestBody @Valid  EventDTO anEvent){
         System.out.println("EVENTO A CREAR");
         System.out.println(anEvent);
         Event eventoCreado = eventService.saveEvent(anEvent);
